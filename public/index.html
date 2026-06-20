@@ -1,0 +1,1170 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpikeNet</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="/css/ui.css?v=profile-upload-3">
+    <link rel="stylesheet" href="/css/chat.css">
+    <link rel="stylesheet" href="/css/market.css">
+    <link rel="stylesheet" href="/css/design-system.css?v=password-recovery-1">
+    <link rel="stylesheet" href="/css/mobile.css">
+</head>
+<body>
+  <div id="spikenet-react-modules-root" hidden></div>
+
+  <div id="auth-screen-element" class="auth-screen sn-card">
+    <h2 id="auth-screen-title">Вход в SpikeNet</h2>
+    <div style="margin-bottom: 15px; margin-top:20px;">
+      <input type="text" class="sn-input" id="auth-username-input" placeholder="Имя геймера..." style="margin-bottom: 12px;">
+      <input type="password" class="sn-input" id="auth-password-input" placeholder="Секретный пароль...">
+      <div id="auth-password-policy-hint" class="auth-password-policy-hint" style="display:none;">Минимум 10 символов: большая и маленькая буква, цифра и спецсимвол.</div>
+    </div>
+    <button id="auth-submit-main-btn" class="sn-btn sn-btn-primary" onclick="submitAuthForm()" style="width: 100%;">Войти в SpikeNet</button>
+    <div class="auth-links-row">
+      <div id="auth-toggle-link-el" class="auth-toggle-link" onclick="toggleAuthMode()">Нет аккаунта? Зарегистрироваться</div>
+      <button id="auth-forgot-password-btn" class="auth-forgot-password-btn" type="button" onclick="openPasswordRecovery()">Забыли пароль?</button>
+    </div>
+    <div id="auth-recovery-panel" class="auth-recovery-panel" style="display:none;">
+      <div class="auth-recovery-note">Введи ник, получи код восстановления, затем поставь новый сложный пароль.</div>
+      <input type="text" class="sn-input" id="auth-reset-username-input" placeholder="Ник аккаунта">
+      <button class="sn-btn" type="button" onclick="requestPasswordResetCode()">Получить код</button>
+      <input type="text" class="sn-input" id="auth-reset-code-input" placeholder="Код восстановления">
+      <input type="password" class="sn-input" id="auth-reset-new-password-input" placeholder="Новый сложный пароль">
+      <button class="sn-btn sn-btn-primary" type="button" onclick="confirmPasswordReset()">Сменить пароль</button>
+    </div>
+  </div>
+
+  <div id="main-dashboard-container" class="container">
+    <header>
+      <div class="header-text">
+        <div class="spikenet-brand-mark" aria-hidden="true">S</div>
+        <div>
+          <h1>SpikeNet</h1>
+          <p>Игровая сеть Спайка: цены, группы и друзья для <span id="welcome-username-lbl" class="sn-accent" style="font-weight:800;">Геймер</span></p>
+        </div>
+      </div>
+
+      <div class="spike-top-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m16.5 16.5 4 4"></path>
+        </svg>
+        <input id="spike-global-market-search" class="sn-input" placeholder="Поиск лотов, игр и продавцов" oninput="setMarketSearchFromHeader(this.value)">
+      </div>
+
+      <div class="controls-panel">
+        <button class="sn-btn theme-toggle-btn spike-header-tile spike-friends-tile" onclick="toggleSocialSidebar()" title="Друзья" aria-label="Друзья">
+          <svg class="spike-header-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8.8 11.2a4.2 4.2 0 1 0 0-8.4 4.2 4.2 0 0 0 0 8.4Z"></path>
+            <path d="M15.8 10.4a3.6 3.6 0 1 0 0-7.2"></path>
+            <path d="M2.4 21c.7-4.2 3.1-6.4 6.4-6.4s5.7 2.2 6.4 6.4"></path>
+            <path d="M14.8 14.8c2.9.5 4.8 2.5 5.4 6.2"></path>
+          </svg>
+          <span class="spike-header-label">Друзья</span>
+        </button>
+        <button class="sn-btn theme-toggle-btn spike-header-tile spike-sell-tile" onclick="openSellMarketTab()" title="Продать" aria-label="Продать">
+          <svg class="spike-header-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14"></path>
+            <path d="M5 12h14"></path>
+          </svg>
+          <span class="spike-header-label">Продать</span>
+        </button>
+        <button class="sn-btn theme-toggle-btn spike-header-tile spike-wallet-tile" onclick="openWalletMarketTab()" title="Кошелёк" aria-label="Кошелёк">
+          <svg class="spike-header-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7.5h13.5a2.5 2.5 0 0 1 2.5 2.5v7a2.5 2.5 0 0 1-2.5 2.5H4a2 2 0 0 1-2-2v-10a2 2 0 0 1 2-2Z"></path>
+            <path d="M16 13h4"></path>
+            <path d="M5 7.5V5.8a1.8 1.8 0 0 1 1.8-1.8H17"></path>
+          </svg>
+          <span class="spike-header-label">Кошелёк</span>
+          <small id="header-wallet-balance">0 SPK</small>
+        </button>
+        <div class="sn-btn spike-header-tile spike-profile-tile" role="button" tabindex="0" onclick="openProfileCard()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openProfileCard();}" title="Профиль" aria-label="Профиль">
+          <img id="user-avatar-preview" class="spike-header-avatar" src="">
+          <span class="spike-header-label">Профиль</span>
+        </div>
+        <button class="sn-btn sn-btn-icon theme-toggle-btn spike-header-square spike-notify-btn" onclick="toggleNotificationCenter()" title="Уведомления SpikeNet" aria-label="Уведомления SpikeNet">
+          🔔
+          <span id="spike-notification-count" class="spike-notification-dot">0</span>
+        </button>
+        <button id="spike-theme-switch" class="sn-btn sn-btn-icon theme-toggle-btn spike-header-square spike-theme-switch" onclick="toggleTheme()" title="Переключить тему" aria-label="Переключить тему">
+          <span class="spike-theme-orbit" aria-hidden="true">
+            <span class="spike-theme-sun">
+              <span></span><span></span><span></span><span></span>
+            </span>
+            <span class="spike-theme-moon"></span>
+          </span>
+        </button>
+      </div>
+    </header>
+
+    <nav class="ps-squads-panel" aria-label="Навигация SpikeNet">
+      <button class="sn-btn sn-btn-icon ps-rail-collapse-btn" onclick="toggleSpikeRail()" title="Свернуть меню" aria-label="Свернуть меню">
+        <span class="ps-rail-collapse-icon">‹</span>
+      </button>
+      <button class="sn-btn ps-squad-node-btn ps-rail-home-btn" onclick="openHomeScreen()" title="Главная SpikeNet" aria-label="Главная SpikeNet">
+        <span class="ps-rail-icon">S</span>
+        <span class="ps-rail-text">Главная</span>
+      </button>
+      <div class="ps-squads-divider"></div>
+      <button class="sn-btn ps-squad-node-btn ps-rail-chat-total" onclick="openChatsDock()" title="Чаты" aria-label="Чаты">
+        <span class="ps-rail-icon">✉</span>
+        <span class="ps-rail-text">Чаты</span>
+        <span id="rail-chat-total-unread" class="ps-rail-unread-dot"></span>
+      </button>
+      <button id="ps-rail-admin-btn" class="sn-btn ps-squad-node-btn ps-rail-admin-btn" onclick="openAdminCenter()" title="Admin Center" aria-label="Admin Center" style="display:none;">
+        <span class="ps-rail-icon">⚑</span>
+        <span class="ps-rail-text">Админ</span>
+      </button>
+      <div class="ps-squads-divider"></div>
+      <div class="ps-rail-section-label">Группы</div>
+      <button class="sn-btn ps-squad-create-btn" onclick="createNewSquadGroupPrompt()" title="Создать группу" aria-label="Создать группу">
+        <span class="ps-rail-icon">+</span>
+        <span class="ps-rail-text">&#1043;&#1088;&#1091;&#1087;&#1087;&#1072;</span>
+      </button>
+      <div class="ps-squads-divider"></div>
+      <div id="my-persistent-squads-list" style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+        <span class="ps-squad-empty-state">Загрузка групп...</span>
+      </div>
+    </nav>
+
+    <section class="spike-hero-banner" aria-label="SpikeNet">
+      <button class="spike-hero-banner-link" onclick="document.getElementById('spike-marketplace')?.scrollIntoView({ block: 'start', behavior: 'smooth' })" aria-label="Перейти к маркету"></button>
+    </section>
+
+    <div id="spike-chat-dock" class="spike-chat-dock">
+      <div class="spike-chat-dock-header">
+        <span class="spike-chat-dock-title">Чаты</span>
+        <button class="ps-social-sidebar-close" onclick="closeChatsDock()">&times;</button>
+      </div>
+      <div id="spike-chat-dock-list" class="spike-chat-dock-list"></div>
+      <div id="spike-chat-dock-view">
+        <div class="spike-chat-empty-view">
+          <div class="spike-empty-state">
+            <strong>Выбери чат слева</strong>
+            <span>Или добавь друга, чтобы начать первый DM.</span>
+            <button class="sn-btn spike-empty-action" onclick="openSocialSidebar(); switchSocialTab(null, 'social-search')">
+              <strong>Найти друга</strong><span>открыть поиск</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="spike-dm-parking" style="display:none;"></div>
+    <div id="spike-group-parking" style="display:none;"></div>
+
+    <section class="spike-command-center" aria-label="SpikeNet центр">
+      <div class="sn-card spike-panel">
+        <div class="spike-panel-title">
+          <span>Командный центр</span>
+          <span id="spike-level-label" class="spike-level-badge">Новичок сети</span>
+        </div>
+        <div class="spike-stat-grid">
+          <div class="spike-stat"><strong id="spike-stat-games">0</strong><span>активных лотов</span></div>
+          <div class="spike-stat"><strong id="spike-stat-deals">0</strong><span>сделок escrow</span></div>
+          <div class="spike-stat"><strong id="spike-stat-friends">0</strong><span>друзей в сети</span></div>
+          <div class="spike-stat"><strong id="spike-stat-groups">0</strong><span>групп SpikeNet</span></div>
+        </div>
+        <div class="spike-progress"><span id="spike-level-progress"></span></div>
+      </div>
+
+      <div class="sn-card spike-panel">
+        <div class="spike-panel-title">
+          <span>Лента активности</span>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="clearSpikeActivity()">Очистить</button>
+        </div>
+        <div id="spike-activity-feed" class="spike-feed">
+          <div class="spike-feed-item">Пока тихо. Спайк прислушивается.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ps-social-sidebar" id="socialSidebar">
+      <div class="ps-social-sidebar-header">
+        <h3>Друзья SpikeNet</h3>
+        <button class="ps-social-sidebar-close" onclick="toggleSocialSidebar()">&times;</button>
+      </div>
+
+      <div id="social-hub-lists-container" style="display: block; width: 100%;">
+        <div class="ps-social-tabs">
+          <button class="sn-tab ps-social-tab-btn active" onclick="switchSocialTab(event, 'social-friends')">Друзья <span id="friends-count-badge"></span></button>
+          <button class="sn-tab ps-social-tab-btn" onclick="switchSocialTab(event, 'social-requests')">Заявки <span id="requests-count-badge" class="ps-social-alert" style="display:none;">0</span></button>
+          <button class="sn-tab ps-social-tab-btn" onclick="switchSocialTab(event, 'social-search')">Поиск</button>
+        </div>
+
+        <div id="social-friends" class="ps-social-content active">
+          <div id="friends-list-render" class="ps-social-list">
+            <p class="sn-empty ps-social-empty">Список друзей пуст</p>
+          </div>
+        </div>
+
+        <div id="social-requests" class="ps-social-content">
+          <div id="requests-list-render" class="ps-social-list">
+            <p class="sn-empty ps-social-empty">Входящих заявок нет</p>
+          </div>
+        </div>
+
+        <div id="social-search" class="ps-social-content">
+          <div class="ps-social-search-bar" style="margin-bottom: 12px; width: 100%;">
+            <input type="text" id="global-user-search-input" placeholder="Введите ник или ник#тег..." style="width: 100%;" oninput="executeSocialSearchLive(this.value)">
+          </div>
+          <div id="search-users-render" class="ps-social-list">
+            <p class="sn-empty ps-social-empty">Введите никнейм для поиска</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="ps-dm-chat-view" class="spike-dm-elite" style="display: none; height: 100%;">
+        <div class="ps-dm-chat-container spike-dm-shell">
+          <div class="spike-dm-topbar">
+            <button class="sn-btn sn-btn-icon spike-dm-back" onclick="closePrivateChat()" title="Закрыть чат">←</button>
+            <div class="spike-dm-peer">
+              <div class="spike-dm-peer-avatar-wrap">
+                <img id="spike-dm-peer-avatar" class="sn-avatar spike-dm-peer-avatar" src="">
+                <span class="spike-dm-peer-status"></span>
+              </div>
+              <div>
+                <button id="ps-dm-target-username" class="spike-dm-peer-name" onclick="if(currentChatTargetUserId) openPublicGamerProfile(currentChatTargetUserId)">Геймер</button>
+                <div class="spike-dm-peer-subtitle">личный чат · файлы · звонки · закрепы</div>
+              </div>
+            </div>
+            <div class="spike-dm-actions-top">
+              <button class="sn-btn sn-btn-icon spike-dm-top-action" onclick="startDirectCall()" title="Звонок" aria-label="Звонок">
+                <svg class="spike-voice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72"/></svg>
+              </button>
+              <button class="sn-btn spike-dm-top-action" onclick="clearPrivateChatHistory()">Очистить</button>
+            </div>
+          </div>
+
+          <div id="spike-dm-call-banner" class="spike-dm-call-banner">
+            <span id="spike-dm-call-text">Звонок...</span>
+            <span id="spike-dm-call-actions" style="display:flex; gap:6px;">
+              <button id="spike-dm-call-accept" class="sn-btn spike-mini-btn social-action-btn" onclick="acceptDirectCall()">Принять</button>
+              <button class="sn-btn spike-mini-btn social-action-btn" onclick="endDirectCall()">Сбросить</button>
+            </span>
+          </div>
+
+          <div class="spike-dm-command-row">
+            <div id="spike-dm-pinned" class="spike-dm-pinned"></div>
+            <div class="spike-dm-search-wrap">
+              <input id="spike-dm-search" class="sn-input spike-dm-search" placeholder="Поиск по сообщениям" oninput="filterDirectChat(this.value)">
+              <button class="sn-btn spike-mini-btn social-action-btn" onclick="clearDirectSearch()">Сброс</button>
+            </div>
+          </div>
+
+          <div class="ps-dm-messages-area spike-dm-timeline" id="ps-dm-messages-log"></div>
+          <div id="spike-dm-typing" class="spike-dm-typing"></div>
+
+          <div class="ps-dm-input-zone spike-dm-composer">
+            <button class="sn-btn sn-btn-icon spike-dm-compose-btn" onclick="attachPrivateMessageFile()" title="Файл или ссылка">+</button>
+            <input id="ps-dm-file-input" type="file" style="display:none" accept="image/*,.pdf,.txt,.zip" onchange="uploadPrivateMessageFile(this.files?.[0])">
+            <input type="text" id="ps-dm-message-input" class="sn-input ps-dm-input spike-dm-compose-input" placeholder="Сообщение, ссылка или файл..." oninput="handleDirectTyping()" onkeydown="if(event.key === 'Enter') sendPrivateMessage()">
+            <button class="sn-btn sn-btn-icon spike-dm-compose-send" onclick="sendPrivateMessage()">➜</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="lobby-panel" class="lobby-box">
+      <div class="lobby-header">
+        <div class="ps-voice-wrapper">
+          <div class="ps-voice-channels-zone">
+            <div class="ps-voice-channel-item" id="voice-channel-main" onclick="toggleVoiceConnect()">
+              <span class="ps-voice-channel-status-icon">🔈</span>
+              <span class="ps-voice-channel-name">🔊 Общий Голосовой Канал</span>
+              <span class="ps-voice-users-count" id="voice-counter">(0)</span>
+            </div>
+            <div id="voice-active-users-list-legacy" class="ps-voice-users-sublist"></div>
+          </div>
+
+          <div class="ps-voice-controls" id="voiceControlsPanel" style="display: none;">
+            <div class="ps-voice-user-info">
+              <span class="ps-voice-pulse-dot"></span>
+              <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                <span class="ps-voice-status-lbl">Голос подключен</span>
+                <span class="sn-muted" style="font-size: 0.75rem;" id="connected-room-name">#lobby</span>
+              </div>
+            </div>
+            <div class="ps-voice-btn-group">
+              <button class="sn-btn sn-btn-icon ps-voice-action-btn" id="btnToggleMute" onclick="toggleMicrophoneMute()" aria-label="Заглушить микрофон">
+                <svg class="ps-voice-svg" viewBox="0 0 24 24" id="mic-icon-svg">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="currentColor"/>
+                  <path d="M19 10v1a7 7 0 0 1-14 0v-1M12 19v4M8 23h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+              <button class="sn-btn sn-btn-icon ps-voice-action-btn" id="btnToggleDeafen" onclick="toggleVoiceDeafen()" aria-label="Глушить звук">
+                <svg class="ps-voice-svg" viewBox="0 0 24 24" id="deafen-icon-svg">
+                  <path d="M3 14c0-4.97 4.03-9 9-9s9 4.03 9 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M4 14h3v5H4zm13 0h3v5h-3z" fill="currentColor"/>
+                </svg>
+              </button>
+              <button class="sn-btn sn-btn-icon ps-voice-action-btn ps-btn-disconnect-voice" onclick="disconnectFromVoiceChannels()" aria-label="Отключиться от войса">
+                <svg class="ps-voice-svg" viewBox="0 0 24 24">
+                  <path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a1 1 0 0 1 1-.27 11.28 11.28 0 0 0 .56 3.51 1 1 0 0 1-.27 1z" fill="currentColor"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="lobby-room-title" class="lobby-title">📡 Мультиплеерная пати-комната</div>
+        <div style="display: flex; gap: 8px;">
+          <button class="sn-btn social-action-btn ps-group-settings-btn" onclick="openGroupSettingsModal()">⚙️ Настройки</button>
+          <button id="copy-lobby-link-btn" class="sn-btn social-action-btn" onclick="openSquadInviteModal()">📋 Позвать Друга</button>
+          <button class="sn-btn sn-btn-danger social-action-btn" onclick="leaveCurrentLobby()">🚪 Закрыть Группу</button>
+        </div>
+      </div>
+      
+      <div class="ps-chat-wrapper">
+        <div class="spike-lobby-channels">
+          <div class="spike-channel-category">Текстовые</div>
+          <button class="sn-btn spike-channel-btn active" onclick="switchLobbyChannel('chat', this)"># общий</button>
+          <button class="sn-btn spike-channel-btn" onclick="switchLobbyChannel('deals', this)"># лоты</button>
+          <button class="sn-btn spike-channel-btn" onclick="switchLobbyChannel('votes', this)"># голосования</button>
+          <button class="sn-btn spike-channel-btn" onclick="switchLobbyChannel('media', this)"># медиа</button>
+          <div class="spike-channel-category">Голосовые</div>
+          <button class="spike-channel-btn spike-voice-channel-btn" onclick="selectVoiceChannel('voice', this)">voice общий <span id="voice-counter-inline">(0)</span></button>
+          <button class="spike-channel-btn spike-voice-channel-btn" onclick="selectVoiceChannel('duo', this)">voice дуо</button>
+          <button class="spike-channel-btn spike-voice-channel-btn" onclick="selectVoiceChannel('squad', this)">voice сквад</button>
+          <div id="spike-sidebar-voice-panel" class="spike-sidebar-voice-panel">
+            <div class="spike-sidebar-voice-title">
+              <span id="spike-sidebar-voice-title">voice общий</span>
+              <span id="spike-sidebar-voice-count">(0)</span>
+            </div>
+            <div id="voice-active-users-list" class="spike-sidebar-voice-users"></div>
+            <button class="sn-btn spike-mini-btn social-action-btn" onclick="toggleVoiceConnect()" id="spike-sidebar-voice-connect">Подключиться</button>
+          </div>
+        </div>
+        <div class="spike-discord-channel-header">
+          <div>
+            <span id="spike-channel-title" class="spike-discord-channel-title"># общий</span>
+            <span id="spike-channel-topic" class="spike-discord-channel-topic">чат группы, ссылки и быстрые сборы</span>
+          </div>
+          <div class="spike-discord-header-actions">
+            <input class="sn-input spike-chat-search" id="spike-chat-search" placeholder="Поиск" oninput="filterLobbyChat(this.value)">
+            <button class="sn-btn spike-mini-btn social-action-btn" onclick="togglePinsDrawer()">Пины</button>
+            <button class="sn-btn spike-mini-btn social-action-btn" onclick="openSquadInviteModal()">Инвайт</button>
+            <button class="sn-btn spike-mini-btn social-action-btn" onclick="openGroupSettingsModal()">Настройки</button>
+            <button class="sn-btn spike-mini-btn social-action-btn" onclick="leaveCurrentLobby()">Выйти</button>
+          </div>
+        </div>
+        <div id="spike-pinned-message" class="spike-pinned-message">
+          <div><strong>Пин</strong> <span id="spike-pinned-text"></span></div>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="clearPinnedMessage()">убрать</button>
+        </div>
+        <div id="lobby-channel-chat" class="spike-channel-view active" style="flex-direction:column; gap:10px; min-height:0;">
+          <div id="chat-messages" class="ps-chat-screen"></div>
+          <div class="ps-chat-reactions-bar">
+            <button class="ps-reaction-btn" onclick="sendQuickReaction('Собираю пати, залетайте!')">Пати</button>
+            <button class="ps-reaction-btn" onclick="sendQuickReaction('Готов на катку.')">На катку</button>
+            <button class="ps-reaction-btn" onclick="sendQuickReaction('Киньте лот, посмотрим через escrow.')">Лот</button>
+            <button class="ps-reaction-btn" onclick="insertMention()">@</button>
+          </div>
+        </div>
+        <div id="lobby-channel-voice" class="spike-channel-view" style="flex-direction:column; gap:10px;">
+          <div class="spike-feed-item">Голосовой канал управляется сверху в панели группы. Статусы mute/deafen попадают в профиль.</div>
+        </div>
+        <div id="lobby-channel-deals" class="spike-channel-view" style="flex-direction:column; gap:10px;">
+          <div id="spike-lobby-deals-list" class="spike-feed"></div>
+        </div>
+        <div id="lobby-channel-votes" class="spike-channel-view" style="flex-direction:column; gap:10px;">
+          <div class="spike-feed-item">Голосуйте на карточках игр. Самый популярный вариант станет игрой вечера.</div>
+        </div>
+        <div id="lobby-channel-media" class="spike-channel-view" style="flex-direction:column; gap:10px;">
+          <div class="spike-feed-item">Кидай ссылки на картинки в # общий, они появятся с превью прямо в чате.</div>
+        </div>
+        <div id="lobby-channel-duo" class="spike-channel-view" style="flex-direction:column; gap:10px;">
+          <div class="spike-feed-item">Duo voice использует общий WebRTC-движок. Подключайся через нижнюю панель.</div>
+        </div>
+        <div id="lobby-channel-squad" class="spike-channel-view" style="flex-direction:column; gap:10px;">
+          <div class="spike-feed-item">Squad voice использует общий WebRTC-движок. Подключайся через нижнюю панель.</div>
+        </div>
+        <div id="spike-reply-preview" class="spike-reply-preview">
+          <span id="spike-reply-text"></span>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="clearReplyTarget()">Отмена</button>
+        </div>
+        <div class="spike-chat-meta-row">
+          <span id="spike-typing-indicator" class="spike-typing-indicator"></span>
+          <span id="spike-read-receipts">seen 0</span>
+        </div>
+        <div class="spike-chat-input-zone" style="display: flex; gap: 8px;">
+          <button class="sn-btn sn-btn-icon" onclick="attachLobbyMessageFile()" title="Прикрепить файл" aria-label="Прикрепить файл">+</button>
+          <input id="lobby-file-input" type="file" style="display:none" accept="image/*,.pdf,.txt,.zip" onchange="uploadLobbyMessageFile(this.files?.[0])">
+          <input type="text" id="chat-input" placeholder="Сообщение, ссылка или @ник..." style="flex:1; padding: 12px 16px;">
+          <button class="sn-btn sn-btn-primary" onclick="sendMessage()">Отправить</button>
+        </div>
+      </div>
+
+      <div id="spike-voice-dock" class="spike-voice-dock">
+        <div style="min-width:0;">
+          <div class="sn-title" style="font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="spike-dock-username">voice</div>
+          <div class="sn-muted" style="font-size:0.72rem;" id="spike-dock-status">не подключён</div>
+        </div>
+        <div class="ps-voice-btn-group">
+          <button class="sn-btn sn-btn-icon ps-voice-action-btn" onclick="toggleVoiceConnect()" title="Connect">
+            <svg class="spike-voice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.77.63 2.61a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6.27 6.27l1.29-1.29a2 2 0 0 1 2.11-.45c.84.3 1.71.51 2.61.63A2 2 0 0 1 22 16.92Z"/></svg>
+          </button>
+          <button class="sn-btn sn-btn-icon ps-voice-action-btn" onclick="toggleMicrophoneMute()" title="Mute">
+            <svg class="spike-voice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/><path d="M8 22h8"/></svg>
+          </button>
+          <button class="sn-btn sn-btn-icon ps-voice-action-btn" onclick="toggleVoiceDeafen()" title="Deafen">
+            <svg class="spike-voice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 14a9 9 0 0 1 18 0"/><path d="M4 14h3v6H4z"/><path d="M17 14h3v6h-3z"/></svg>
+          </button>
+          <button class="sn-btn sn-btn-icon ps-voice-action-btn ps-btn-disconnect-voice" onclick="disconnectFromVoiceChannels()" title="Disconnect">
+            <svg class="spike-voice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 2 20 20"/><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="status-panel-wrapper">
+        <span class="sn-accent" style="font-size: 0.82rem; font-weight: 700;">Твой статус:</span>
+        <input type="text" id="my-custom-status-input" class="sn-input status-input-field" placeholder="Что делаешь прямо сейчас? (например: Ищу пати на катку)...">
+        <button class="sn-btn social-action-btn" onclick="sendMyStatusUpdate()">Обновить</button>
+      </div>
+      <div class="ps-members-title sn-muted" style="font-size: 0.9rem; font-weight: 500; margin-top: 5px;">Игроки в комнате:</div>
+      <div id="lobby-members-container" class="members-list-wrapper"></div>
+    </div>
+
+    <div id="spike-pins-drawer" class="spike-pins-drawer">
+      <div class="spike-panel-title">
+        <span>Закреплённые сообщения</span>
+        <button class="sn-btn spike-mini-btn social-action-btn" onclick="togglePinsDrawer()">Закрыть</button>
+      </div>
+      <div id="spike-pins-list" class="spike-feed"></div>
+    </div>
+
+    <div id="spike-message-menu" class="spike-message-menu">
+      <button onclick="messageMenuAction('reply')">Reply</button>
+      <button onclick="messageMenuAction('react')">+1</button>
+      <button onclick="messageMenuAction('pin')">Pin</button>
+      <button class="danger" onclick="messageMenuAction('delete')">Delete</button>
+    </div>
+
+    <section id="spike-admin-center" class="spike-admin-center" aria-label="SpikeNet Admin Center">
+      <div class="spike-market-panel">
+        <div class="spike-market-head">
+          <div>
+            <div class="spike-market-title">SpikeNet Admin Center</div>
+            <div class="spike-market-subtle">споры, жалобы, риск-сделки, новые продавцы и журнал действий</div>
+          </div>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="loadAdminOverview()">Обновить</button>
+        </div>
+        <div class="spike-market-stats">
+          <div class="spike-market-stat">Users<strong id="admin-stat-users">0</strong></div>
+          <div class="spike-market-stat">Banned<strong id="admin-stat-banned">0</strong></div>
+          <div class="spike-market-stat">Muted<strong id="admin-stat-muted">0</strong></div>
+          <div class="spike-market-stat">Open reports<strong id="admin-stat-reports">0</strong></div>
+        </div>
+      </div>
+
+      <div class="spike-market-panel spike-mod-center">
+        <div class="spike-market-head">
+          <div>
+            <div class="spike-market-title">Модераторский пульт</div>
+            <div class="spike-market-subtle">всё рабочее в одном месте, без угадывания где что лежит</div>
+          </div>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="loadAdminModerationCenter()">Обновить пульт</button>
+        </div>
+        <div class="spike-market-stats">
+          <div class="spike-market-stat">Споры<strong id="mod-stat-disputes">0</strong></div>
+          <div class="spike-market-stat">Жалобы<strong id="mod-stat-reports">0</strong></div>
+          <div class="spike-market-stat">Риск-сделки<strong id="mod-stat-suspicious">0</strong></div>
+          <div class="spike-market-stat">Новые продавцы<strong id="mod-stat-sellers">0</strong></div>
+          <div class="spike-market-stat">Логи<strong id="mod-stat-audit">0</strong></div>
+        </div>
+        <div class="spike-mod-queues">
+          <div class="spike-mod-queue">
+            <div class="spike-mod-queue-head"><strong>Споры</strong><span class="spike-market-chip" id="mod-chip-disputes">0</span></div>
+            <div id="mod-disputes-list" class="spike-mod-list"></div>
+          </div>
+          <div class="spike-mod-queue">
+            <div class="spike-mod-queue-head"><strong>Жалобы</strong><span class="spike-market-chip" id="mod-chip-reports">0</span></div>
+            <div id="mod-reports-list" class="spike-mod-list"></div>
+          </div>
+          <div class="spike-mod-queue">
+            <div class="spike-mod-queue-head"><strong>Подозрительные сделки</strong><span class="spike-market-chip" id="mod-chip-suspicious">0</span></div>
+            <div id="mod-suspicious-list" class="spike-mod-list"></div>
+          </div>
+          <div class="spike-mod-queue">
+            <div class="spike-mod-queue-head"><strong>Новые продавцы</strong><span class="spike-market-chip" id="mod-chip-sellers">0</span></div>
+            <div id="mod-sellers-list" class="spike-mod-list"></div>
+          </div>
+          <div class="spike-mod-queue">
+            <div class="spike-mod-queue-head"><strong>Логи действий</strong><span class="spike-market-chip" id="mod-chip-audit">0</span></div>
+            <div id="mod-audit-list" class="spike-mod-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spike-admin-grid">
+        <div class="spike-market-panel">
+          <div class="spike-market-head">
+            <div>
+              <div class="spike-market-title">Пользователи</div>
+              <div class="spike-market-subtle">admin выдаёт роли, support модерирует аккаунты</div>
+            </div>
+            <input id="admin-user-search" class="sn-input spike-chat-search" placeholder="Поиск по id или нику" oninput="renderAdminCenter()">
+          </div>
+          <div id="admin-users-list" class="spike-admin-user-list"></div>
+        </div>
+
+        <div class="spike-admin-side-list">
+          <div class="spike-market-panel">
+            <div class="spike-market-head">
+              <div>
+                <div class="spike-market-title">Жалобы</div>
+                <div class="spike-market-subtle">open / reviewing / resolved / dismissed</div>
+              </div>
+            </div>
+            <div id="admin-reports-list" class="spike-market-ledger"></div>
+          </div>
+
+          <div class="spike-market-panel">
+            <div class="spike-market-head">
+              <div>
+                <div class="spike-market-title">Audit log</div>
+                <div class="spike-market-subtle">последние действия администрации</div>
+              </div>
+            </div>
+            <div id="admin-audit-list" class="spike-market-ledger"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="spike-store-categories" aria-label="Категории SpikeNet">
+      <button class="spike-store-category" onclick="setMarketQuickCategory('all')" data-store-category="all">
+        <span class="spike-store-category-icon">S</span>
+        <strong>Все</strong>
+      </button>
+      <button class="spike-store-category" onclick="setMarketQuickCategory('key')" data-store-category="key">
+        <span class="spike-store-category-icon">🔑</span>
+        <strong>Ключи</strong>
+      </button>
+      <button class="spike-store-category" onclick="setMarketQuickCategory('account')" data-store-category="account">
+        <span class="spike-store-category-icon">👤</span>
+        <strong>Аккаунты</strong>
+      </button>
+      <button class="spike-store-category" onclick="setMarketQuickCategory('item')" data-store-category="item">
+        <span class="spike-store-category-icon">◆</span>
+        <strong>Предметы</strong>
+      </button>
+      <button class="spike-store-category" onclick="setMarketQuickCategory('service')" data-store-category="service">
+        <span class="spike-store-category-icon">⚡</span>
+        <strong>Услуги</strong>
+      </button>
+      <button class="spike-store-category" onclick="setMarketGameFilter('steam')">
+        <span class="spike-store-category-icon">♨</span>
+        <strong>Steam</strong>
+      </button>
+      <button class="spike-store-category" onclick="setMarketGameFilter('roblox')">
+        <span class="spike-store-category-icon">R</span>
+        <strong>Roblox</strong>
+      </button>
+      <button class="spike-store-category" onclick="setMarketGameFilter('playstation')">
+        <span class="spike-store-category-icon">PS</span>
+        <strong>PlayStation</strong>
+      </button>
+      <button class="spike-store-category" onclick="openChatsDock()">
+        <span class="spike-store-category-icon">✉</span>
+        <strong>Чаты</strong>
+      </button>
+      <button class="spike-store-category" onclick="openSocialSidebar()">
+        <span class="spike-store-category-icon">+</span>
+        <strong>Друзья</strong>
+      </button>
+      <button class="spike-store-category" onclick="openWalletMarketTab()">
+        <span class="spike-store-category-icon">₿</span>
+        <strong>Кошелёк</strong>
+      </button>
+    </section>
+
+    <section id="spike-marketplace" class="spike-marketplace" aria-label="SpikeNet Marketplace">
+      <div class="spike-market-panel spike-market-tabs-panel">
+        <div class="spike-market-head">
+          <div>
+            <div class="spike-market-title">SpikeNet Market</div>
+            <div class="spike-market-subtle">лоты, escrow, репутация и SPK ledger</div>
+          </div>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="loadMarketplace()">Обновить</button>
+        </div>
+        <div class="spike-market-tabs" style="margin-top:14px;">
+          <button class="sn-tab spike-market-tab active" data-market-tab="lots" onclick="switchMarketTab('lots')">Лоты</button>
+          <button class="sn-tab spike-market-tab" data-market-tab="sell" onclick="switchMarketTab('sell')">Продать</button>
+          <button class="sn-tab spike-market-tab" data-market-tab="trades" onclick="switchMarketTab('trades')">Сделки</button>
+          <button class="sn-tab spike-market-tab" data-market-tab="wallet" onclick="switchMarketTab('wallet')">Кошелёк</button>
+          <button class="sn-tab spike-market-tab" data-market-tab="moderation" onclick="switchMarketTab('moderation')">Модерация</button>
+        </div>
+      </div>
+
+      <div class="spike-market-panel spike-market-view active" data-market-view="lots">
+        <div class="spike-market-toolbar">
+          <div>
+            <div class="spike-market-title">Биржа лотов</div>
+            <div class="spike-market-subtle">покупка через escrow и профиль продавца</div>
+          </div>
+          <div class="spike-market-searchbar">
+            <div class="spike-market-searchbox">
+              <span>⌕</span>
+              <input id="market-search-input" placeholder="лот, игра или продавец" oninput="setMarketSearch(this.value)">
+            </div>
+            <select id="market-sort-select" onchange="setMarketSort(this.value)">
+              <option value="new">Новые</option>
+              <option value="cheap">Дешевле</option>
+              <option value="expensive">Дороже</option>
+              <option value="trusted">Лучшие продавцы</option>
+              <option value="popular">Популярные</option>
+            </select>
+            <button class="sn-btn spike-mini-btn social-action-btn spike-filter-toggle" onclick="toggleMarketFilters()">Фильтры</button>
+          </div>
+          <div class="spike-market-filters">
+            <button class="sn-tab spike-market-filter active" data-market-filter="all" onclick="setMarketFilter('all')">Все</button>
+            <button class="sn-tab spike-market-filter" data-market-filter="key" onclick="setMarketFilter('key')">Ключи</button>
+            <button class="sn-tab spike-market-filter" data-market-filter="item" onclick="setMarketFilter('item')">Предметы</button>
+            <button class="sn-tab spike-market-filter" data-market-filter="service" onclick="setMarketFilter('service')">Услуги</button>
+            <button class="sn-tab spike-market-filter" data-market-filter="account" onclick="setMarketFilter('account')">Аккаунты</button>
+            <button class="sn-tab spike-market-filter" data-market-filter="watchlist" onclick="setMarketFilter('watchlist')">Watchlist</button>
+          </div>
+        </div>
+        <div class="spike-market-exchange-filters">
+          <div class="spike-market-field">
+            <label for="market-game-filter">Игра</label>
+            <select id="market-game-filter" onchange="setMarketGameFilter(this.value)">
+              <option value="all">Все игры</option>
+            </select>
+          </div>
+          <div class="spike-market-field">
+            <label for="market-region-filter">Регион</label>
+            <select id="market-region-filter" onchange="setMarketRegionFilter(this.value)">
+              <option value="all">Все регионы</option>
+            </select>
+          </div>
+          <div class="spike-market-field">
+            <label for="market-min-price-input">Цена от</label>
+            <input id="market-min-price-input" type="number" min="0" step="1" placeholder="SPK" oninput="setMarketPriceRange()">
+          </div>
+          <div class="spike-market-field">
+            <label for="market-max-price-input">Цена до</label>
+            <input id="market-max-price-input" type="number" min="0" step="1" placeholder="SPK" oninput="setMarketPriceRange()">
+          </div>
+          <div class="spike-market-field">
+            <label for="market-rating-filter">Рейтинг</label>
+            <select id="market-rating-filter" onchange="setMarketRatingFilter(this.value)">
+              <option value="0">Любой</option>
+              <option value="4">4.0+</option>
+              <option value="4.5">4.5+</option>
+              <option value="4.8">4.8+</option>
+            </select>
+          </div>
+          <div class="spike-market-toggle">
+            <label><input id="market-verified-filter" type="checkbox" onchange="setMarketVerifiedFilter(this.checked)"> только проверенные</label>
+          </div>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="resetMarketExchangeFilters()">Сбросить</button>
+        </div>
+        <div class="spike-market-subtle">Показано: <span id="market-visible-listings-count">0</span></div>
+        <div id="market-listings-grid" class="spike-market-grid"></div>
+      </div>
+
+      <div class="spike-market-panel spike-market-view" data-market-view="sell">
+        <div class="spike-market-head">
+          <div>
+            <div class="spike-market-title">Выставить лот</div>
+            <div class="spike-market-subtle">ключ, предмет, услуга, аккаунт или другой игровой актив</div>
+          </div>
+        </div>
+        <div class="spike-seller-grid">
+          <form id="market-listing-form" class="spike-market-form" style="margin-top:14px;">
+            <input id="market-title-input" placeholder="Название лота" maxlength="90" required>
+            <select id="market-category-select">
+              <option value="key">ключ</option>
+              <option value="item">предмет</option>
+              <option value="service">услуга</option>
+              <option value="account">аккаунт</option>
+              <option value="other">другое</option>
+            </select>
+            <input id="market-price-input" type="number" min="1" step="1" placeholder="Цена SPK" required>
+            <div class="spike-market-upload-row">
+              <input id="market-image-input" placeholder="Картинка лота: https://... или /uploads/file.png">
+              <button type="button" class="sn-btn spike-mini-btn social-action-btn" onclick="uploadMarketListingImage()">Загрузить</button>
+            </div>
+            <textarea id="market-description-input" placeholder="Описание, условия передачи, регион"></textarea>
+            <button type="submit">Выставить лот</button>
+          </form>
+          <div>
+            <div class="spike-listing-preview" id="market-listing-preview"></div>
+            <div class="spike-market-head" style="margin-top:16px;">
+              <div>
+                <div class="spike-market-title">Мои лоты</div>
+                <div class="spike-market-subtle">активные, проданные и снятые</div>
+              </div>
+            </div>
+            <div id="market-my-listings-list" class="spike-market-ledger"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spike-market-panel spike-market-view" data-market-view="trades">
+        <div class="spike-market-head">
+          <div>
+            <div class="spike-market-title">Сделки</div>
+            <div class="spike-market-subtle">escrow, подтверждения, споры и хэш операции</div>
+          </div>
+        </div>
+        <div id="market-action-center" class="spike-market-protect"></div>
+        <div class="spike-market-protect spike-market-protect-compact">
+          <strong>Spike Protect</strong><br>
+          SPK замораживаются в escrow, продавец передаёт лот, покупатель подтверждает получение. При проблеме открывается спор.
+        </div>
+        <div class="spike-market-stats">
+          <div class="spike-market-stat">Escrow<strong id="market-trades-pending-count">0</strong></div>
+          <div class="spike-market-stat">Споры<strong id="market-trades-dispute-count">0</strong></div>
+          <div class="spike-market-stat">Done<strong id="market-trades-completed-count">0</strong></div>
+          <div class="spike-market-stat">Refund<strong id="market-trades-cancelled-count">0</strong></div>
+        </div>
+        <div class="spike-market-filters">
+          <button class="spike-trade-filter active" data-trade-filter="all" onclick="setMarketTradeFilter('all')">Все</button>
+          <button class="spike-trade-filter" data-trade-filter="pending" onclick="setMarketTradeFilter('pending')">Escrow</button>
+          <button class="spike-trade-filter" data-trade-filter="dispute" onclick="setMarketTradeFilter('dispute')">Споры</button>
+          <button class="spike-trade-filter" data-trade-filter="completed" onclick="setMarketTradeFilter('completed')">Завершённые</button>
+          <button class="spike-trade-filter" data-trade-filter="cancelled" onclick="setMarketTradeFilter('cancelled')">Refund</button>
+        </div>
+        <div id="market-trades-list" class="spike-market-ledger"></div>
+      </div>
+
+      <div class="spike-market-panel spike-market-view" data-market-view="wallet">
+        <div class="spike-market-head">
+          <div>
+            <div class="spike-market-title">Кошелёк</div>
+            <div class="spike-market-subtle">баланс, заявки на ввод/вывод и ledger</div>
+          </div>
+        </div>
+        <div class="spike-market-stats spike-wallet-summary">
+          <div class="spike-market-stat">Баланс<strong><span id="market-wallet-balance">0</span> SPK</strong></div>
+          <div class="spike-market-stat">В escrow<strong><span id="market-wallet-locked">0</span> SPK</strong></div>
+          <div class="spike-market-stat">Лоты<strong id="market-stat-listings">0</strong></div>
+          <div class="spike-market-stat">Сделки<strong id="market-stat-trades">0</strong></div>
+        </div>
+        <div class="spike-market-balance"><span id="market-wallet-free">0 SPK</span></div>
+        <div class="spike-market-subtle">операций в ledger: <span id="market-ledger-count">0</span></div>
+        <div class="spike-wallet-actions">
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="topUpMarketWallet(500)">Заявка +500 SPK</button>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="topUpMarketWallet(1500)">Заявка +1500 SPK</button>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="topUpMarketWallet()">Пополнить</button>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="withdrawMarketWallet()">Вывести</button>
+        </div>
+        <div class="spike-market-head" style="margin-top:14px;">
+          <div>
+            <div class="spike-market-title">Платёжные заявки</div>
+            <div class="spike-market-subtle">пополнение ждёт модератора, вывод резервирует свободный баланс</div>
+          </div>
+        </div>
+        <div id="market-payment-requests-list" class="spike-market-ledger"></div>
+        <div class="spike-market-head" style="margin-top:14px;">
+          <div>
+            <div class="spike-market-title">Ledger</div>
+            <div class="spike-market-subtle">все движения SPK</div>
+          </div>
+        </div>
+        <div id="market-ledger-list" class="spike-market-ledger"></div>
+      </div>
+
+      <div class="spike-market-panel spike-market-view" data-market-view="moderation">
+        <div class="spike-market-head">
+          <div>
+            <div class="spike-market-title">Market Moderation</div>
+            <div class="spike-market-subtle">открытые споры и быстрые решения escrow</div>
+          </div>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="loadMarketModeration()">Обновить</button>
+        </div>
+        <div class="spike-market-stats">
+          <div class="spike-market-stat">Open disputes<strong id="market-admin-open-disputes">0</strong></div>
+          <div class="spike-market-stat">Resolved<strong id="market-admin-resolved-disputes">0</strong></div>
+          <div class="spike-market-stat">Escrow trades<strong id="market-admin-pending-trades">0</strong></div>
+          <div class="spike-market-stat">Active lots<strong id="market-admin-active-listings">0</strong></div>
+          <div class="spike-market-stat">Payments<strong id="market-admin-pending-payments">0</strong></div>
+        </div>
+        <div class="spike-mod-toolbar">
+          <input id="market-admin-query" class="sn-input spike-chat-search" placeholder="поиск: спор, пользователь, лот" oninput="setMarketModerationQuery(this.value)">
+          <select id="market-admin-dispute-filter" class="sn-input" onchange="setMarketDisputeFilter(this.value)">
+            <option value="open">Открытые споры</option>
+            <option value="resolved">Решённые споры</option>
+            <option value="all">Все споры</option>
+          </select>
+          <select id="market-admin-payment-filter" class="sn-input" onchange="setMarketPaymentFilter(this.value)">
+            <option value="pending">Ожидают платежи</option>
+            <option value="approved">Подтверждённые</option>
+            <option value="rejected">Отклонённые</option>
+            <option value="all">Все платежи</option>
+          </select>
+        </div>
+        <div class="spike-market-head" style="margin-top:14px;">
+          <div>
+            <div class="spike-market-title">Платёжные заявки</div>
+            <div class="spike-market-subtle">ручное подтверждение пополнений и выводов</div>
+          </div>
+        </div>
+        <div id="market-admin-payments-list" class="spike-market-ledger"></div>
+        <div class="spike-market-head" style="margin-top:14px;">
+          <div>
+            <div class="spike-market-title">Споры</div>
+            <div class="spike-market-subtle">escrow arbitration</div>
+          </div>
+        </div>
+        <div id="market-admin-disputes-list" class="spike-market-ledger"></div>
+      </div>
+    </section>
+
+    <div class="ps-settings-overlay" id="marketSellerOverlay" onclick="closeMarketSellerProfile(event)">
+      <div class="spike-market-modal" onclick="event.stopPropagation()">
+        <div class="spike-market-head">
+          <div>
+            <div class="spike-market-title" id="market-seller-name">Seller</div>
+            <div class="spike-market-subtle" id="market-seller-stats">loading</div>
+          </div>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="closeMarketSellerProfile()">Закрыть</button>
+        </div>
+        <div id="market-seller-reviews" class="spike-market-ledger" style="max-height:420px;"></div>
+      </div>
+    </div>
+
+    <div class="ps-settings-overlay" id="marketBuyTicketOverlay" onclick="closeMarketBuyTicket(event)">
+      <div class="spike-market-modal" onclick="event.stopPropagation()">
+        <div class="spike-market-head">
+          <div>
+            <div class="spike-market-title" id="market-ticket-title">Покупка лота</div>
+            <div class="spike-market-subtle" id="market-ticket-subtitle">escrow ticket</div>
+          </div>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="closeMarketBuyTicket()">Закрыть</button>
+        </div>
+        <div id="market-ticket-body"></div>
+        <div class="spike-market-card-actions" style="margin-top:14px;">
+          <button class="sn-btn spike-mini-btn social-action-btn" id="market-ticket-chat-btn">Чат</button>
+          <button class="sn-btn spike-mini-btn social-action-btn" id="market-ticket-seller-btn">Профиль</button>
+          <button class="sn-btn spike-mini-btn social-action-btn" id="market-ticket-confirm-btn">Заморозить SPK</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="spike-legal-footer" aria-label="Документы SpikeNet">
+      <a href="/how-it-works" target="_blank" rel="noopener">Как проходит сделка</a>
+      <a href="/legal/offer" target="_blank" rel="noopener">Оферта</a>
+      <a href="/contacts" target="_blank" rel="noopener">Контакты и реквизиты</a>
+    </footer>
+
+    <div class="ps-settings-overlay" id="marketProductOverlay" onclick="closeMarketProductPage(event)">
+      <div class="spike-market-modal spike-product-modal" onclick="event.stopPropagation()">
+        <div class="spike-market-head">
+          <div>
+            <div class="spike-market-title" id="market-product-title">Лот</div>
+            <div class="spike-market-subtle" id="market-product-subtitle">product page</div>
+          </div>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="closeMarketProductPage()">Закрыть</button>
+        </div>
+        <div id="market-product-body"></div>
+      </div>
+    </div>
+
+    <div class="ps-settings-overlay" id="marketDealRoomOverlay" onclick="closeMarketDealRoom(event)">
+      <div class="spike-market-modal" onclick="event.stopPropagation()">
+        <div class="spike-market-head">
+          <div>
+            <div class="spike-market-title" id="market-deal-title">Сделка</div>
+            <div class="spike-market-subtle" id="market-deal-subtitle">deal room</div>
+          </div>
+          <button class="sn-btn spike-mini-btn social-action-btn" onclick="closeMarketDealRoom()">Закрыть</button>
+        </div>
+        <div id="market-deal-body"></div>
+        <div class="spike-deal-room-actions" id="market-deal-actions"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="cat-container">
+    <div id="cat-speech" class="cat-bubble">Спайк на связи.</div>
+    <svg class="cat-body-svg" viewBox="0 0 80 80" onclick="interactWithCat()">
+      <g class="cat-tail"><path d="M22,64 Q7,55 12,38 Q16,26 24,38" fill="none" stroke="#374151" stroke-width="6.5" stroke-linecap="round" /></g>
+      <circle cx="40" cy="56" r="21" fill="#374151" />
+      <circle cx="30" cy="74" r="4.5" fill="#252a34" />
+      <circle cx="50" cy="74" r="4.5" fill="#252a34" />
+      <ellipse cx="40" cy="54" rx="9" ry="11" fill="#f9fafb" />
+      <polygon class="cat-ear-left" points="25,23 25,10 38,20" fill="#374151" /><polygon class="cat-ear-left" points="27,21 27,13 36,19" fill="#f87171" />
+      <polygon class="cat-ear-right" points="55,23 55,10 42,20" fill="#374151" /><polygon class="cat-ear-right" points="53,21 53,13 44,19" fill="#f87171" />
+      <circle cx="40" cy="35" r="16" fill="#4b5563" />
+      <g id="cat-face">
+        <circle cx="33" cy="33" r="3" fill="#10b981" /> <circle cx="32.2" cy="31.8" r="0.8" fill="#ffffff" />
+        <circle cx="47" cy="33" r="3" fill="#10b981" /> <circle cx="46.2" cy="31.8" r="0.8" fill="#ffffff" />
+        <polygon points="39,37 41,37 40,38.5" fill="#f87171" />
+        <path d="M37,39 Q40,41 40,39 Q40,41 43,39" fill="none" stroke="#111827" stroke-width="1.5" stroke-linecap="round" />
+        <path d="M24,35 Q21,38 25,41" fill="#4b5563" /><path d="M56,35 Q59,38 55,41" fill="#4b5563" />
+        <line x1="25" y1="38" x2="15" y2="38" stroke="#9ca3af" stroke-width="1" />
+        <line x1="55" y1="38" x2="65" y2="38" stroke="#9ca3af" stroke-width="1" />
+      </g>
+    </svg>
+  </div>
+
+  <button class="ps-settings-trigger-btn" aria-label="Открыть настройки" onclick="openSettingsModal()">
+    <svg class="ps-gear-icon" viewBox="0 0 24 24" stroke-width="2">
+      <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
+    </svg>
+  </button>
+
+  <div class="ps-settings-overlay" id="settingsModalOverlay">
+      <div class="ps-settings-card">
+        <div class="ps-settings-sidebar">
+        <button class="ps-tab-btn active" onclick="switchSettingsTab(event, 'tab-visual')">🎨 Интерфейс</button>
+        <button class="ps-tab-btn" onclick="switchSettingsTab(event, 'tab-analytics')">📊 Сервисы</button>
+      </div>
+
+      <div class="ps-settings-main">
+        <div class="ps-settings-header">
+          <h2 id="ps-modal-title-dyn">🎨 Настройки интерфейса</h2>
+          <button class="ps-settings-close-btn" onclick="closeSettingsModal()">&times;</button>
+        </div>
+
+        <div class="ps-settings-body">
+          <div id="tab-visual" class="ps-tab-content active">
+            <div class="ps-setting-item">
+              <div class="ps-setting-info">
+                <span class="ps-setting-title">Пресет анимаций</span>
+                <span class="ps-setting-desc">Cinematic (плавный) / Performance (быстрый)</span>
+              </div>
+              <select id="animPresetSelect" class="ps-input-select">
+                <option value="cinematic">🎬 Cinematic</option>
+                <option value="performance">⚡ Performance</option>
+              </select>
+            </div>
+            <div class="ps-setting-item">
+              <div class="ps-setting-info">
+                <span class="ps-setting-title">Цветовой акцент хаба</span>
+                <span class="ps-setting-desc">Изменить неоновый цвет сайта</span>
+              </div>
+              <select id="colorAccentSelect" class="ps-input-select">
+                <option value="#f59e0b">Янтарный бренд</option>
+                <option value="#14b8a6">Мятный успех</option>
+                <option value="#ef4444">Красный акцент</option>
+              </select>
+            </div>
+            <div class="ps-setting-item">
+              <div class="ps-setting-info">
+                <span class="ps-setting-title">Тема SpikeNet</span>
+                <span class="ps-setting-desc">Night Hunt, Amber Cat, Cyber Mint или Light Desk</span>
+              </div>
+              <select id="spikeThemeSelect" class="ps-input-select" onchange="applySpikeTheme(this.value)">
+                <option value="night-hunt">Night Hunt</option>
+                <option value="amber-cat">Amber Cat</option>
+                <option value="cyber-mint">Cyber Mint</option>
+                <option value="light-desk">Light Desk</option>
+              </select>
+            </div>
+            <div class="ps-setting-item">
+              <div class="ps-setting-info">
+                <span class="ps-setting-title">Компактный вид</span>
+                <span class="ps-setting-desc">Сделать интерфейс плотнее</span>
+              </div>
+              <label class="ps-theme-switch"><input type="checkbox" id="compactGridToggle"><span class="ps-slider"></span></label>
+            </div>
+          </div>
+
+          <div id="tab-analytics" class="ps-tab-content">
+            <div class="ps-setting-item">
+              <div class="ps-setting-info">
+                <span class="ps-setting-title">Частота обновлений</span>
+                <span class="ps-setting-desc">Периодичность обновления market-данных</span>
+              </div>
+              <select id="scanIntervalSelect" class="ps-input-select">
+                <option value="15">⏱️ Каждые 15 минут</option>
+                <option value="30" selected>⏱️ Каждые 30 минут</option>
+                <option value="180">⏱️ Каждые 3 часа</option>
+              </select>
+            </div>
+            <div class="ps-setting-item">
+              <div class="ps-setting-info">
+                <span class="ps-setting-title">История цен в LIVE</span>
+                <span class="ps-setting-desc">Авто-рендеринг всех графиков при загрузке</span>
+              </div>
+              <label class="ps-theme-switch"><input type="checkbox" id="liveChartsToggle"><span class="ps-slider"></span></label>
+            </div>
+            <div class="ps-setting-item">
+              <div class="ps-setting-info">
+                <span class="ps-setting-title">Звуки кота Спайка</span>
+                <span class="ps-setting-desc">Ретро-озвучка диалогов маскота</span>
+              </div>
+              <label class="ps-theme-switch"><input type="checkbox" id="soundToggle" checked><span class="ps-slider"></span></label>
+            </div>
+          </div>
+        </div>
+        <div style="padding: 0 24px 24px 24px;">
+          <button class="ps-btn-sync" id="saveAllSettingsBtn" style="width:100%; padding:12px !important;" onclick="saveAllHubSettingsLive()">💾 Применить изменения</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ps-settings-overlay" id="profileCardOverlay">
+    <div class="ps-profile-card">
+      <button class="ps-settings-close-btn" style="position:absolute; top:15px; right:20px;" onclick="closeProfileCard()">&times;</button>
+      <img id="ps-big-avatar" class="ps-profile-avatar-big" src="">
+      <h3 class="ps-profile-name" id="ps-profile-username-title">Имя игрока</h3>
+      <p class="ps-profile-status">Агент сети SpikeNet</p>
+      <div class="spike-profile-level">
+        <span id="spike-profile-level-label" class="spike-level-badge">Новичок сети</span>
+        <div class="spike-progress"><span id="spike-profile-level-progress"></span></div>
+      </div>
+
+      <div class="spike-profile-tabs">
+        <button class="spike-profile-tab active" onclick="switchProfileTab(event, 'profile-main-tab')">Профиль</button>
+        <button class="spike-profile-tab" onclick="switchProfileTab(event, 'profile-visual-tab')">Вид</button>
+        <button class="spike-profile-tab" onclick="switchProfileTab(event, 'profile-data-tab')">Данные</button>
+      </div>
+
+      <div id="profile-main-tab" class="spike-profile-section active">
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <span class="sn-title" style="font-size:0.85rem; font-weight:600;">Изменить аватар:</span>
+          <div class="ps-sync-input-group">
+            <input type="file" id="avatarFileInput" class="ps-input-text" accept="image/png,image/jpeg,image/gif,image/webp,image/avif" onchange="previewSelectedAvatarFile(this.files?.[0])">
+            <button class="ps-btn-sync" id="saveAvatarBtn">Сменить</button>
+          </div>
+          <span class="sn-muted" style="font-size:0.72rem;">PNG, JPG, GIF, WEBP или AVIF. Ссылка больше не нужна.</span>
+        </div>
+        <label class="sn-muted" style="display:grid; gap:5px; font-size:0.78rem; font-weight:800;">
+          Статус SpikeNet
+          <input id="spikeProfileStatusInput" class="ps-input-text" placeholder="Например: ищу кооп на вечер">
+        </label>
+        <button class="ps-btn-sync" onclick="saveSpikeProfileExtras()">Сохранить профиль</button>
+      </div>
+
+      <div id="profile-visual-tab" class="spike-profile-section">
+        <label class="sn-muted" style="display:grid; gap:5px; font-size:0.78rem; font-weight:800;">
+          Баннер профиля
+          <input id="spikeProfileBannerInput" type="file" class="ps-input-text" accept="image/png,image/jpeg,image/gif,image/webp,image/avif" onchange="previewSelectedBannerFile(this.files?.[0])">
+        </label>
+        <span class="sn-muted" id="spikeProfileBannerHint" style="font-size:0.72rem;">Загрузи картинку с компьютера, ссылка не нужна.</span>
+        <label class="sn-muted" style="display:grid; gap:5px; font-size:0.78rem; font-weight:800;">
+          Значок возле ника
+          <select id="spikeProfileBadgeSelect" class="ps-input-select">
+            <option value="★">★ Звезда</option>
+            <option value="◆">◆ Кристалл</option>
+            <option value="S">S Spike</option>
+            <option value="!">! Сигнал</option>
+          </select>
+        </label>
+        <button class="ps-btn-sync" onclick="saveSpikeProfileExtras()">Сохранить вид</button>
+      </div>
+
+      <div id="profile-data-tab" class="spike-profile-section">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
+          <span class="sn-title" style="font-size:0.85rem; font-weight:600;">Регион Steam по умолчанию:</span>
+          <select id="steamRegionSelect" class="ps-input-select">
+            <option value="kz">Казахстан (₸)</option>
+            <option value="ru">Россия (₽)</option>
+            <option value="tr">Турция ($)</option>
+          </select>
+        </div>
+        <button class="ps-btn-danger" onclick="logoutSession()">Покинуть систему</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="spike-toast-stack" class="spike-toast-stack" aria-live="polite"></div>
+
+  <div id="spike-dm-context-menu" class="spike-dm-context-menu">
+    <button onclick="directMessageMenuAction('react')">Реакция +1</button>
+    <button onclick="directMessageMenuAction('pin')">Закрепить</button>
+    <button onclick="directMessageMenuAction('copy')">Копировать</button>
+    <button class="danger" onclick="directMessageMenuAction('delete')">Удалить</button>
+  </div>
+
+  <div id="spike-notification-popover" class="spike-notification-popover">
+    <div class="spike-panel-title">
+      <span>Центр уведомлений</span>
+      <button class="sn-btn spike-mini-btn social-action-btn" onclick="clearSpikeNotifications()">Очистить</button>
+    </div>
+    <div id="spike-notifications-list" class="spike-notifications-list">
+      <div class="spike-notification-item">Новых уведомлений нет.</div>
+    </div>
+  </div>
+
+  <div class="ps-settings-overlay" id="publicGamerProfileOverlay">
+    <div class="ps-public-profile-card">
+      <button class="ps-settings-close-btn" style="position:absolute; top:15px; right:20px;" onclick="closePublicProfileCard()">&times;</button>
+      <img id="ps-pub-avatar" class="ps-profile-avatar-big" src="">
+      <h3 class="ps-profile-name" id="ps-pub-username-title">Имя игрока</h3>
+      <p class="ps-profile-status" id="ps-pub-live-status" style="margin-bottom:10px;">Статус...</p>
+      
+      <div style="display:flex; justify-content:center; gap:20px; margin-bottom:15px; background:rgba(0,0,0,0.15); padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.02);">
+        <div>
+          <div style="font-size:1.15rem; font-weight:700; color:var(--accent);" id="ps-pub-market-count">0</div>
+          <div style="font-size:0.72rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Сделок в маркете</div>
+        </div>
+      </div>
+
+      <div style="text-align:left; flex:1; display:flex; flex-direction:column;">
+        <span class="sn-title" style="font-size:0.85rem; font-weight:700; display:flex; align-items:center; gap:6px;">
+          Trust профиль продавца
+        </span>
+        <div id="ps-market-trust-render" class="ps-radar-games-list">
+          <p class="sn-empty ps-social-empty" style="padding:15px 0;">Загружаем маркетовую репутацию...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ps-settings-overlay" id="squadInviteModalOverlay">
+    <div class="ps-invite-list-modal">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 class="sn-title" style="margin:0; font-size:1.05rem;">🛸 Собрать пати-сквад</h3>
+        <button class="ps-settings-close-btn" onclick="closeSquadInviteModal()">&times;</button>
+      </div>
+      <div class="ps-group-action-row" style="margin-top:12px;">
+        <select id="spike-invite-ttl" class="ps-role-select">
+          <option value="0">Link forever</option>
+          <option value="3600000">Link 1 hour</option>
+          <option value="86400000">Link 24 hours</option>
+        </select>
+        <button class="social-action-btn" onclick="copyTimedInviteLink()">Copy invite link</button>
+      </div>
+      <div class="ps-invite-friends-scroll" id="squad-friends-invite-list">
+        <p class="sn-empty ps-social-empty">У вас пока нет друзей в сети</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ps-settings-overlay" id="groupSettingsModalOverlay">
+    <div class="ps-settings-card ps-group-settings-card">
+      <div class="ps-settings-header">
+        <div>
+          <h2 id="group-settings-title">⚙️ Настройки группы</h2>
+          <div id="group-settings-subtitle" class="ps-group-settings-subtitle">Участники, роли и доступ</div>
+        </div>
+        <button class="ps-settings-close-btn" onclick="closeGroupSettingsModal()">&times;</button>
+      </div>
+      <div class="ps-group-settings-body">
+        <div class="ps-group-settings-summary">
+          <div class="ps-group-settings-stat">
+            <span id="group-settings-count">0</span>
+            <small>участников</small>
+          </div>
+          <div class="ps-group-settings-note">Владелец может назначать админов. Админы помогают управлять составом группы.</div>
+        </div>
+        <div id="group-settings-actions" class="ps-group-settings-actions"></div>
+        <div id="group-settings-members-list" class="ps-group-settings-list">
+          <div class="ps-msg-system">Загрузка настроек...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/market.js"></script>
+  <script src="/js/chat.js"></script>
+  <script src="/js/groups.js"></script>
+  <script src="/js/admin.js"></script>
+  <script src="/js/profile.js?v=profile-upload-3"></script>
+  <script src="/js/app.js?v=password-recovery-1"></script>
+  <script type="module" src="/js/spikenet-react-modules.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+node_modules/
+.env
+*.log
+backups/
+artifacts/
+uploads/*
+!uploads/.gitkeep
+npm-debug.log*
+tmp-*.png
+tmp-*.jpg
+tmp-*.jpeg
+tmp-*.webp
+.DS_Store
+Thumbs.db

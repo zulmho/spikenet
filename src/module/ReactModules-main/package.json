@@ -1,0 +1,42 @@
+{
+  "name": "@kaldyrr/react-modules",
+  "version": "0.1.0",
+  "description": "Reusable utility modules for React projects: analytics, API client, feature flags, error reporting, weather, feedback and performance.",
+  "type": "module",
+  "main": "./modules/index.js",
+  "module": "./modules/index.js",
+  "exports": {
+    ".": "./modules/index.js",
+    "./analytics-kit": "./modules/analytics-kit.jsx",
+    "./api-client": "./modules/api-client.js",
+    "./error-reporter": "./modules/error-reporter.jsx",
+    "./feature-flags": "./modules/feature-flags.jsx",
+    "./feedback-widget": "./modules/feedback-widget.jsx",
+    "./geo-weather": "./modules/geo-weather.jsx",
+    "./performance-monitor": "./modules/performance-monitor.js",
+    "./persistent-state": "./modules/persistent-state.js"
+  },
+  "files": [
+    "modules",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
+  },
+  "devDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "keywords": [
+    "react",
+    "analytics",
+    "feature-flags",
+    "error-boundary",
+    "api-client",
+    "performance"
+  ],
+  "license": "MIT"
+}
+

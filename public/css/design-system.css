@@ -1,0 +1,1576 @@
+/*
+  SpikeNet design system
+  This file is intentionally loaded last. It gives old feature-specific
+  classes one shared visual language while new screens can use sn-* classes.
+*/
+
+:root {
+    --sn-font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --sn-brand: #f5a415;
+    --sn-brand-strong: #e48f00;
+    --sn-success: #18b981;
+    --sn-danger: #ef4444;
+    --sn-info: #3b82f6;
+    --sn-radius-xs: 8px;
+    --sn-radius-sm: 10px;
+    --sn-radius-md: 14px;
+    --sn-radius-lg: 18px;
+    --sn-radius-xl: 24px;
+    --sn-control-h: 44px;
+    --sn-ease: 160ms ease;
+}
+
+html[data-theme="light"] {
+    --sn-page: #f4f6f9;
+    --sn-page-soft: #eef1f5;
+    --sn-surface: #ffffff;
+    --sn-surface-2: #f7f8fb;
+    --sn-surface-3: #eef2f6;
+    --sn-elevated: #ffffff;
+    --sn-line: rgba(20, 27, 38, 0.1);
+    --sn-line-strong: rgba(20, 27, 38, 0.16);
+    --sn-text: #151923;
+    --sn-text-soft: #303846;
+    --sn-muted: #687386;
+    --sn-muted-2: #8b96a8;
+    --sn-shadow-sm: 0 8px 24px rgba(19, 26, 39, 0.07);
+    --sn-shadow-md: 0 18px 50px rgba(19, 26, 39, 0.1);
+    --sn-glass: rgba(255, 255, 255, 0.82);
+    --sn-bg: var(--sn-page);
+    --sn-panel: var(--sn-surface);
+    --sn-chat-bg: #f7f8fb;
+    --sn-bubble: #ffffff;
+    --sn-border: var(--sn-line);
+    --spike-accent: var(--sn-brand);
+}
+
+html:not([data-theme="light"]) {
+    --sn-page: #0f1218;
+    --sn-page-soft: #111721;
+    --sn-surface: #171c24;
+    --sn-surface-2: #1f2631;
+    --sn-surface-3: #27303d;
+    --sn-elevated: #1b202a;
+    --sn-line: rgba(148, 163, 184, 0.16);
+    --sn-line-strong: rgba(148, 163, 184, 0.24);
+    --sn-text: #f7f8fb;
+    --sn-text-soft: #d9dee8;
+    --sn-muted: #9aa6b8;
+    --sn-muted-2: #778296;
+    --sn-shadow-sm: 0 12px 28px rgba(0, 0, 0, 0.22);
+    --sn-shadow-md: 0 22px 54px rgba(0, 0, 0, 0.3);
+    --sn-glass: rgba(23, 28, 36, 0.82);
+    --sn-bg: var(--sn-page);
+    --sn-panel: var(--sn-surface);
+    --sn-chat-bg: #111720;
+    --sn-bubble: var(--sn-surface-2);
+    --sn-border: var(--sn-line);
+    --spike-accent: var(--sn-brand);
+}
+
+body {
+    font-family: var(--sn-font);
+    color: var(--sn-text);
+    background: var(--sn-page);
+}
+
+* {
+    scrollbar-color: var(--sn-muted-2) transparent;
+}
+
+*:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--sn-brand) 36%, transparent);
+    outline-offset: 3px;
+}
+
+.sn-card,
+.spike-panel,
+.spike-feed-item,
+.spike-empty-state,
+.spike-market-panel,
+.spike-market-card,
+.spike-market-modal,
+.spike-listing-page,
+.spike-seller-page,
+.ps-settings-card,
+.ps-profile-card,
+.ps-public-profile-card,
+.ps-social-user-card,
+.spike-admin-user-card,
+.spike-mod-item,
+.ps-squad-empty-state {
+    background: var(--sn-surface) !important;
+    border: 1px solid var(--sn-line) !important;
+    border-radius: var(--sn-radius-lg) !important;
+    box-shadow: var(--sn-shadow-sm);
+    color: var(--sn-text) !important;
+}
+
+.sn-card-muted,
+.spike-market-stat,
+.spike-market-protect,
+.ps-settings-section,
+.ps-profile-section,
+.spike-profile-section,
+.spike-admin-log-row {
+    background: var(--sn-surface-2) !important;
+    border: 1px solid var(--sn-line) !important;
+    border-radius: var(--sn-radius-md) !important;
+    color: var(--sn-text) !important;
+}
+
+.sn-card-media {
+    width: 100%;
+    display: block;
+    border-radius: var(--sn-radius-md);
+    background: var(--sn-surface-3);
+    object-fit: cover;
+}
+
+.sn-card-body {
+    color: var(--sn-text);
+}
+
+.sn-btn,
+.social-action-btn,
+.spike-mini-btn,
+.theme-toggle-btn,
+.ps-btn-sync,
+.ps-social-btn,
+.ps-dm-btn-send,
+.ps-dm-btn-back,
+.spike-dm-call-btn,
+.ps-voice-action-btn,
+.ps-reaction-btn,
+.ps-settings-trigger-btn,
+.ps-settings-close-btn,
+.ps-squad-node-btn,
+.ps-squad-create-btn,
+.spike-channel-btn,
+.spike-market-tab,
+.spike-market-filter,
+.ps-tab-btn,
+.ps-social-tab-btn,
+.spike-profile-tab,
+.spike-store-category,
+.spike-trade-filter,
+.spike-empty-action,
+.ps-social-sidebar-close,
+.spike-news-next,
+.message-context-menu button,
+.market-form button[type="submit"],
+.spike-market-form button[type="submit"],
+.auth-screen button,
+.delete-btn,
+.vote-btn-lobby,
+.link-btn,
+.market-buy-btn,
+.spike-market-buy-btn {
+    min-height: var(--sn-control-h);
+    border: 1px solid var(--sn-line) !important;
+    border-radius: var(--sn-radius-md) !important;
+    background: var(--sn-surface-2) !important;
+    color: var(--sn-text) !important;
+    font-weight: 800;
+    letter-spacing: 0;
+    box-shadow: none !important;
+    transition: transform var(--sn-ease), border-color var(--sn-ease), background var(--sn-ease), color var(--sn-ease);
+}
+
+.sn-btn:hover,
+.social-action-btn:hover,
+.spike-mini-btn:hover,
+.theme-toggle-btn:hover,
+.ps-btn-sync:hover,
+.ps-social-btn:hover,
+.ps-dm-btn-send:hover,
+.ps-dm-btn-back:hover,
+.spike-dm-call-btn:hover,
+.ps-voice-action-btn:hover,
+.ps-reaction-btn:hover,
+.ps-settings-trigger-btn:hover,
+.ps-settings-close-btn:hover,
+.ps-squad-node-btn:hover,
+.ps-squad-create-btn:hover,
+.spike-channel-btn:hover,
+.spike-market-tab:hover,
+.spike-market-filter:hover,
+.ps-tab-btn:hover,
+.ps-social-tab-btn:hover,
+.spike-profile-tab:hover,
+.spike-store-category:hover,
+.spike-trade-filter:hover,
+.spike-empty-action:hover,
+.ps-social-sidebar-close:hover,
+.spike-news-next:hover,
+.message-context-menu button:hover,
+.market-form button[type="submit"]:hover,
+.spike-market-form button[type="submit"]:hover,
+.auth-screen button:hover {
+    transform: translateY(-1px);
+    border-color: var(--sn-line-strong) !important;
+    background: var(--sn-surface-3) !important;
+}
+
+.sn-btn:active,
+.social-action-btn:active,
+.spike-mini-btn:active,
+.theme-toggle-btn:active,
+.ps-btn-sync:active,
+.ps-social-btn:active,
+.ps-dm-btn-send:active,
+.ps-dm-btn-back:active,
+.spike-dm-call-btn:active,
+.ps-voice-action-btn:active,
+.ps-reaction-btn:active,
+.ps-settings-trigger-btn:active,
+.ps-settings-close-btn:active,
+.ps-squad-node-btn:active,
+.ps-squad-create-btn:active,
+.spike-channel-btn:active,
+.spike-market-tab:active,
+.spike-market-filter:active,
+.ps-tab-btn:active,
+.ps-social-tab-btn:active,
+.spike-profile-tab:active,
+.spike-store-category:active,
+.spike-trade-filter:active,
+.spike-empty-action:active,
+.ps-social-sidebar-close:active,
+.spike-news-next:active,
+.message-context-menu button:active,
+.market-form button[type="submit"]:active,
+.spike-market-form button[type="submit"]:active,
+.auth-screen button:active {
+    transform: translateY(0);
+}
+
+.sn-btn-primary,
+.ps-dm-btn-send,
+.market-buy-btn,
+.spike-market-buy-btn,
+.spike-market-tab.active,
+.spike-store-category.active,
+.spike-trade-filter.active,
+.ps-tab-btn.active,
+.ps-social-tab-btn.active,
+.spike-profile-tab.active,
+.spike-channel-btn.active,
+.market-form button[type="submit"],
+.spike-market-form button[type="submit"],
+.auth-screen button[type="submit"],
+#auth-submit-main-btn {
+    background: var(--sn-brand) !important;
+    border-color: var(--sn-brand) !important;
+    color: #17110a !important;
+}
+
+.sn-btn-danger,
+.ps-btn-danger,
+.ps-btn-disconnect-voice,
+.ps-social-btn-danger,
+.message-context-menu button.danger,
+.delete-btn {
+    background: color-mix(in srgb, var(--sn-danger) 18%, var(--sn-surface-2)) !important;
+    border-color: color-mix(in srgb, var(--sn-danger) 42%, var(--sn-line)) !important;
+    color: var(--sn-text) !important;
+}
+
+.sn-btn-icon,
+.ps-rail-collapse-btn,
+.spike-header-square,
+.ps-dm-btn-back,
+.spike-dm-call-btn,
+.ps-voice-action-btn,
+.ps-squad-node-btn,
+.ps-squad-create-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    padding: 0 !important;
+}
+
+.spike-header-tile {
+    border: 1px solid var(--sn-line) !important;
+    border-radius: var(--sn-radius-lg) !important;
+    background: var(--sn-surface-2) !important;
+    color: var(--sn-text) !important;
+    box-shadow: none !important;
+}
+
+.sn-input,
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+textarea,
+select,
+.ps-input-text,
+.ps-input-select,
+.ps-dm-input,
+.status-input-field,
+.spike-chat-search,
+.spike-market-searchbox {
+    min-height: var(--sn-control-h);
+    background: var(--sn-surface) !important;
+    border: 1px solid var(--sn-line) !important;
+    border-radius: var(--sn-radius-md) !important;
+    color: var(--sn-text) !important;
+    box-shadow: none !important;
+}
+
+.sn-input::placeholder,
+input::placeholder,
+textarea::placeholder {
+    color: var(--sn-muted) !important;
+}
+
+select {
+    color-scheme: light;
+}
+
+html:not([data-theme="light"]) select {
+    color-scheme: dark;
+}
+
+.sn-tabs,
+.ps-social-tabs,
+.spike-market-tabs,
+.spike-profile-tabs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sn-tab,
+.ps-social-tab-btn,
+.spike-market-tab,
+.ps-tab-btn,
+.spike-profile-tab {
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.sn-badge,
+.spike-level-badge,
+.spike-market-chip,
+.spike-news-badge,
+.ps-social-alert,
+.spike-role-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 24px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--sn-brand) 14%, var(--sn-surface-2)) !important;
+    border: 1px solid color-mix(in srgb, var(--sn-brand) 34%, var(--sn-line)) !important;
+    color: var(--sn-text) !important;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0;
+}
+
+.sn-avatar,
+.spike-header-avatar,
+.ps-social-avatar,
+.ps-profile-avatar-big,
+.ps-pub-avatar,
+.spike-seller-avatar,
+.spike-admin-avatar,
+.spike-chat-row-avatar,
+.message-avatar,
+.chat-avatar,
+.ps-dm-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--sn-radius-md);
+    background: var(--sn-surface-3);
+    border: 1px solid var(--sn-line);
+    color: var(--sn-text);
+    overflow: hidden;
+}
+
+.sn-empty,
+.spike-empty-state,
+.ps-social-empty,
+.ps-squad-empty-state,
+.spike-chat-empty-view {
+    display: grid;
+    place-items: center;
+    min-height: 180px;
+    padding: 28px;
+    text-align: center;
+    color: var(--sn-muted) !important;
+}
+
+[id$="Overlay"],
+.modal-overlay,
+.ps-modal-overlay,
+.spike-market-overlay {
+    background: color-mix(in srgb, var(--sn-page) 74%, transparent) !important;
+    backdrop-filter: blur(12px);
+}
+
+.sn-modal,
+.modal,
+.settings-modal,
+.profile-card-modal,
+.public-profile-modal,
+.spike-market-modal {
+    background: var(--sn-elevated) !important;
+    border: 1px solid var(--sn-line) !important;
+    border-radius: var(--sn-radius-xl) !important;
+    box-shadow: var(--sn-shadow-md);
+    color: var(--sn-text) !important;
+}
+
+.sn-muted,
+.muted,
+.spike-muted,
+.spike-market-subtitle,
+.spike-panel-subtitle,
+.ps-profile-muted,
+.ps-social-muted {
+    color: var(--sn-muted) !important;
+}
+
+.sn-title,
+.spike-section-title,
+.spike-market-title,
+.ps-profile-title,
+.ps-settings-title {
+    color: var(--sn-text) !important;
+    letter-spacing: 0;
+}
+
+.sn-accent,
+.spike-accent,
+.spike-header-user,
+.spike-market-price,
+.spike-news-highlight {
+    color: var(--sn-brand) !important;
+}
+
+@media (max-width: 860px) {
+    :root {
+        --sn-control-h: 42px;
+    }
+
+    .sn-card,
+    .spike-panel,
+    .spike-market-panel,
+    .spike-market-card,
+    .ps-settings-card,
+    .ps-profile-card,
+    .ps-social-user-card {
+        border-radius: var(--sn-radius-md) !important;
+    }
+
+    .sn-tabs,
+    .ps-social-tabs,
+    .spike-market-tabs,
+    .spike-profile-tabs {
+        gap: 8px;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .sn-tabs::-webkit-scrollbar,
+    .ps-social-tabs::-webkit-scrollbar,
+    .spike-market-tabs::-webkit-scrollbar,
+    .spike-profile-tabs::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* Final visual pass over legacy screens that still carry old hard-coded colors. */
+header,
+.controls-panel,
+.ps-squads-panel,
+.ps-social-sidebar,
+.spike-chat-dock,
+.ps-dm-chat-container,
+.spike-lobby-layout,
+.spike-lobby-sidebar,
+.spike-lobby-main,
+.spike-lobby-members,
+.ps-settings-main,
+.ps-settings-sidebar,
+.ps-settings-header,
+.ps-tab-content {
+    background: var(--sn-surface) !important;
+    border-color: var(--sn-line) !important;
+    color: var(--sn-text) !important;
+}
+
+header {
+    box-shadow: var(--sn-shadow-sm) !important;
+}
+
+header h1,
+.ps-social-sidebar-header h3,
+.spike-chat-dock-title,
+.ps-settings-header h2,
+.ps-profile-name,
+.ps-pub-name,
+.lobby-title,
+#lobby-room-title,
+#ps-dm-target-username {
+    color: var(--sn-text) !important;
+    background: none !important;
+    -webkit-text-fill-color: currentColor !important;
+}
+
+header p,
+.ps-profile-status,
+.ps-setting-desc,
+.ps-member-role,
+.ps-members-title,
+.spike-market-subtle,
+.spike-market-subtitle,
+.spike-panel-subtitle,
+.spike-chat-row-name small,
+.spike-dm-typing,
+.ps-msg-time,
+.ps-social-name small,
+.ps-group-action-desc {
+    color: var(--sn-muted) !important;
+}
+
+.ps-settings-sidebar {
+    border-right: 1px solid var(--sn-line) !important;
+}
+
+.ps-settings-card,
+.ps-profile-card,
+.ps-public-profile-card {
+    background: var(--sn-elevated) !important;
+}
+
+.ps-profile-avatar-big,
+.ps-pub-avatar,
+.spike-header-avatar {
+    border-color: var(--sn-line-strong) !important;
+    box-shadow: none !important;
+}
+
+.ps-msg-system {
+    background: color-mix(in srgb, var(--sn-info) 10%, var(--sn-surface-2)) !important;
+    border: 1px dashed color-mix(in srgb, var(--sn-info) 26%, var(--sn-line)) !important;
+    color: var(--sn-text-soft) !important;
+}
+
+.spike-room-message,
+.ps-dm-msg-bubble,
+.spike-chat-row,
+.ps-group-member-row,
+.spike-market-trade,
+.spike-market-review,
+.spike-seller-trust-card {
+    color: var(--sn-text) !important;
+}
+
+.ps-dm-msg-bubble.my-msg,
+.spike-room-message.my-msg .spike-room-bubble {
+    background: var(--sn-brand) !important;
+    border-color: var(--sn-brand) !important;
+    color: #17110a !important;
+}
+
+.ps-dm-msg-bubble.their-msg,
+.spike-room-message.their-msg .spike-room-bubble {
+    background: var(--sn-surface-2) !important;
+    border-color: var(--sn-line) !important;
+    color: var(--sn-text) !important;
+}
+
+.spike-room-avatar,
+.ps-msg-avatar,
+.ps-social-avatar,
+.spike-chat-row-avatar,
+.spike-admin-avatar,
+.spike-seller-avatar {
+    border-radius: var(--sn-radius-md) !important;
+    background: var(--sn-surface-3) !important;
+    border: 1px solid var(--sn-line) !important;
+}
+
+.spike-ticket-warning,
+.ps-owner-danger-zone {
+    background: color-mix(in srgb, var(--sn-danger) 10%, var(--sn-surface-2)) !important;
+    border: 1px solid color-mix(in srgb, var(--sn-danger) 28%, var(--sn-line)) !important;
+    color: var(--sn-text) !important;
+    border-radius: var(--sn-radius-md) !important;
+}
+
+.spike-news-card,
+.spike-store-category,
+.spike-market-card,
+.card,
+.skeleton-card {
+    background: var(--sn-surface) !important;
+    border-color: var(--sn-line) !important;
+}
+
+.card:hover,
+.spike-market-card:hover,
+.spike-news-card:hover {
+    border-color: var(--sn-line-strong) !important;
+    box-shadow: var(--sn-shadow-md) !important;
+}
+
+.badge.review,
+.badge.coop,
+.discount-tag {
+    border-radius: 999px !important;
+}
+
+.spike-market-price,
+.price-data-value.current-active,
+.price-data-value.target-active,
+.sales-info h3,
+.sales-timer,
+.lobby-title span,
+#welcome-username-lbl {
+    color: var(--sn-brand) !important;
+}
+
+/* Final cleanup pass: keep all major screens in one visual system. */
+html[data-theme="light"] body,
+html[data-theme="light"] body.market-mode,
+html[data-theme="light"] body.chat-mode,
+html[data-theme="light"] body.group-mode,
+html[data-theme="light"] body.admin-mode {
+    background:
+        radial-gradient(circle at 18% 0%, rgba(245, 164, 21, .08), transparent 30%),
+        linear-gradient(180deg, #f7f8fb 0%, #eef2f6 100%) !important;
+    color: var(--sn-text) !important;
+}
+
+html:not([data-theme="light"]) body,
+html:not([data-theme="light"]) body.market-mode,
+html:not([data-theme="light"]) body.chat-mode,
+html:not([data-theme="light"]) body.group-mode,
+html:not([data-theme="light"]) body.admin-mode {
+    background:
+        radial-gradient(circle at 18% 0%, rgba(245, 164, 21, .09), transparent 30%),
+        linear-gradient(180deg, #0f1218 0%, #0c1016 100%) !important;
+    color: var(--sn-text) !important;
+}
+
+#main-dashboard-container.container,
+#main-dashboard-container.active {
+    color: var(--sn-text) !important;
+}
+
+header,
+.controls-panel,
+.spike-market-view[data-market-view="lots"],
+.spike-admin-center,
+.spike-chat-dock.open,
+.spike-dm-elite,
+html body.group-mode #lobby-panel.open .ps-chat-wrapper,
+html body.group-mode #lobby-panel.open .spike-channel-view,
+html body.group-mode #lobby-panel.open #lobby-channel-chat {
+    background: var(--sn-surface) !important;
+    border: 1px solid var(--sn-line) !important;
+    box-shadow: var(--sn-shadow-sm) !important;
+    color: var(--sn-text) !important;
+}
+
+.spike-market-head,
+.spike-market-toolbar,
+.spike-admin-grid,
+.spike-admin-user-list,
+.spike-admin-side-list,
+.spike-admin-user-card,
+.spike-mod-item,
+.spike-market-trade,
+.spike-market-review,
+.spike-market-ledger,
+.spike-market-form,
+.spike-market-exchange-filters,
+.spike-dm-topbar,
+.spike-dm-command-row,
+.spike-dm-composer,
+.spike-chat-dock-header,
+.spike-chat-dock-list,
+html body.group-mode #lobby-panel.open .ps-channel-sidebar,
+html body.group-mode #lobby-panel.open .ps-chat-topbar,
+html body.group-mode #lobby-panel.open .spike-chat-input-zone {
+    background: var(--sn-surface-2) !important;
+    border-color: var(--sn-line) !important;
+    color: var(--sn-text) !important;
+}
+
+.spike-market-card,
+.spike-listing-card,
+.spike-product-modal,
+.spike-market-modal,
+.spike-seller-hero,
+.spike-seller-trust-card,
+.spike-security-row,
+.spike-admin-user-card,
+.spike-admin-role-toggle,
+.spike-chat-row,
+.spike-dm-pinned,
+.spike-dm-search,
+.spike-dm-context-menu,
+html body.group-mode #lobby-panel.open .spike-channel-btn,
+html body.group-mode #lobby-panel.open .ps-voice-active-box {
+    background: var(--sn-surface) !important;
+    border: 1px solid var(--sn-line) !important;
+    color: var(--sn-text) !important;
+}
+
+.spike-market-card:hover,
+.spike-listing-card:hover,
+.spike-chat-row:hover,
+.spike-store-category:hover,
+.spike-admin-user-card:hover {
+    border-color: var(--sn-line-strong) !important;
+    box-shadow: var(--sn-shadow-md) !important;
+}
+
+.spike-market-card h3,
+.spike-market-card h4,
+.spike-admin-user-card strong,
+.spike-mod-item strong,
+.spike-market-trade strong,
+.spike-market-review strong,
+.spike-dm-peer-name,
+.spike-dm-message-meta strong,
+html body.group-mode #lobby-panel.open #chat-messages .ps-msg-author {
+    color: var(--sn-text) !important;
+}
+
+.spike-market-subtle,
+.spike-market-card p,
+.spike-admin-user-card small,
+.spike-mod-item small,
+.spike-dm-peer-subtitle,
+.spike-dm-message-meta span,
+html body.group-mode #lobby-panel.open #chat-messages .ps-msg-time {
+    color: var(--sn-muted) !important;
+}
+
+.spike-market-card.spike-listing-card .spike-market-card-actions .social-action-btn:last-child,
+.spike-dm-compose-send,
+.ps-dm-btn-send,
+html body.group-mode #lobby-panel.open .spike-chat-send-btn,
+html body.group-mode #lobby-panel.open .my-msg .ps-msg-text,
+html body.group-mode #lobby-panel.open .my-msg .spike-room-bubble {
+    background: var(--sn-brand) !important;
+    border-color: var(--sn-brand) !important;
+    color: #17110a !important;
+}
+
+html body.chat-mode .spike-dm-timeline,
+html body.group-mode #lobby-panel.open #chat-messages,
+html body.group-mode #lobby-panel.open #chat-messages.ps-chat-screen {
+    background: var(--sn-chat-bg) !important;
+}
+
+html body.chat-mode .spike-dm-bubble,
+html body.chat-mode .spike-dm-message.my-msg .spike-dm-bubble,
+html body.group-mode #lobby-panel.open #chat-messages .ps-msg-text,
+html body.group-mode #lobby-panel.open #chat-messages .spike-room-bubble {
+    background: var(--sn-bubble) !important;
+    border-color: var(--sn-line) !important;
+    color: var(--sn-text) !important;
+}
+
+html body.chat-mode .spike-dm-message.my-msg .spike-dm-bubble {
+    border-color: color-mix(in srgb, var(--sn-brand) 28%, var(--sn-line)) !important;
+}
+
+html[data-theme="light"] .spike-store-category.active,
+html[data-theme="light"] .spike-market-tab.active,
+html[data-theme="light"] .spike-market-filter.active,
+html[data-theme="light"] .spike-trade-filter.active,
+html[data-theme="light"] .ps-social-tab-btn.active,
+html[data-theme="light"] .spike-channel-btn.active {
+    background: color-mix(in srgb, var(--sn-brand) 16%, #ffffff) !important;
+    border-color: color-mix(in srgb, var(--sn-brand) 48%, var(--sn-line)) !important;
+    color: #16110a !important;
+}
+
+html[data-theme="light"] .spike-market-chip,
+html[data-theme="light"] .sn-badge,
+html[data-theme="light"] .spike-role-badge {
+    background: #f2f4f8 !important;
+    color: #263142 !important;
+}
+
+html[data-theme="light"] .spike-risk-badge,
+html[data-theme="light"] .spike-seller-badge.verified {
+    background: rgba(24, 185, 129, .12) !important;
+    color: #0f6f4d !important;
+}
+
+html[data-theme="light"] .spike-risk-badge.warn {
+    background: rgba(245, 164, 21, .14) !important;
+    color: #925f00 !important;
+}
+
+html[data-theme="light"] .spike-risk-badge.danger,
+html[data-theme="light"] .spike-seller-badge.risky {
+    background: rgba(239, 68, 68, .12) !important;
+    color: #b91c1c !important;
+}
+
+.spike-admin-center {
+    width: min(1500px, calc(100vw - 64px)) !important;
+    margin: 18px auto !important;
+    padding: 22px !important;
+    border-radius: var(--sn-radius-xl) !important;
+    scroll-margin-top: 132px !important;
+}
+
+html[data-theme="light"] .spike-hero-banner {
+    background:
+        linear-gradient(90deg, rgba(5, 10, 22, .08), rgba(5, 10, 22, .02)),
+        url("/assets/spikenet-hero-banner.png") center / cover no-repeat !important;
+    border-color: rgba(245, 164, 21, .34) !important;
+    box-shadow: 0 20px 48px rgba(20, 27, 38, .12) !important;
+}
+
+html[data-theme="light"] button.spike-hero-banner-link,
+button.spike-hero-banner-link {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+    color: transparent !important;
+    outline-offset: -4px !important;
+}
+
+body.admin-mode .spike-admin-center {
+    margin-top: 120px !important;
+}
+
+.spike-admin-grid {
+    display: grid !important;
+    grid-template-columns: minmax(320px, 1.35fr) minmax(280px, .85fr) !important;
+    gap: 14px !important;
+}
+
+.spike-admin-user-card {
+    border-radius: var(--sn-radius-lg) !important;
+    box-shadow: none !important;
+}
+
+.spike-admin-actions,
+.spike-admin-role-row {
+    gap: 8px !important;
+}
+
+.spike-admin-role-toggle {
+    border-radius: var(--sn-radius-md) !important;
+    min-height: 38px !important;
+}
+
+@media (max-width: 980px) {
+    .spike-admin-center {
+        width: calc(100vw - 24px) !important;
+        padding: 14px !important;
+        border-radius: var(--sn-radius-lg) !important;
+        scroll-margin-top: 96px !important;
+    }
+
+    .spike-admin-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .spike-market-toolbar {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Final layout polish: compact rail, single search field, admin viewport fit. */
+.ps-squads-panel {
+    width: 98px !important;
+    padding: 14px 10px !important;
+    gap: 12px !important;
+    align-items: center !important;
+}
+
+.ps-rail-collapse-btn,
+.ps-squad-node-btn,
+.ps-squad-create-btn {
+    width: 64px !important;
+    min-width: 64px !important;
+    min-height: 58px !important;
+    height: 58px !important;
+    padding: 0 !important;
+    border-radius: 18px !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    place-items: center !important;
+    gap: 2px !important;
+}
+
+.ps-rail-collapse-btn {
+    height: 64px !important;
+    min-height: 64px !important;
+}
+
+.ps-rail-icon {
+    width: 26px !important;
+    height: 26px !important;
+    display: grid !important;
+    place-items: center !important;
+    font-size: 16px !important;
+    margin: 0 !important;
+}
+
+.ps-rail-text {
+    font-size: 11px !important;
+    line-height: 1.1 !important;
+    max-width: 58px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+.ps-rail-section-label,
+.ps-squads-divider {
+    width: 64px !important;
+}
+
+.ps-settings-trigger-btn {
+    left: 20px !important;
+    bottom: 20px !important;
+    width: 58px !important;
+    height: 58px !important;
+    border-radius: 18px !important;
+}
+
+#main-dashboard-container.container,
+#main-dashboard-container.active {
+    padding-left: 122px !important;
+}
+
+body.spike-rail-collapsed .ps-squads-panel {
+    width: 82px !important;
+}
+
+body.spike-rail-collapsed #main-dashboard-container.container,
+body.spike-rail-collapsed #main-dashboard-container.active {
+    padding-left: 98px !important;
+}
+
+.spike-top-search {
+    position: relative !important;
+    height: 54px !important;
+    padding: 0 18px !important;
+    gap: 12px !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+}
+
+.spike-top-search input,
+.spike-top-search .sn-input,
+#spike-global-market-search {
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+}
+
+.spike-top-search input:focus,
+#spike-global-market-search:focus {
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+}
+
+body.admin-mode {
+    overflow: hidden !important;
+}
+
+body.admin-mode #main-dashboard-container > header,
+body.admin-mode .spike-hero-banner,
+body.admin-mode .spike-store-categories {
+    display: none !important;
+}
+
+body.admin-mode #main-dashboard-container.container,
+body.admin-mode #main-dashboard-container.active {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    padding: 18px 18px 24px 122px !important;
+    overflow: auto !important;
+}
+
+body.admin-mode.spike-rail-collapsed #main-dashboard-container.container,
+body.admin-mode.spike-rail-collapsed #main-dashboard-container.active {
+    padding-left: 98px !important;
+}
+
+body.admin-mode .spike-admin-center {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 18px !important;
+    min-height: calc(100vh - 42px) !important;
+    box-sizing: border-box !important;
+}
+
+/* Final controls skin: one premium language for fields and buttons. */
+:root {
+    --sn-control-bg: color-mix(in srgb, var(--sn-surface-2) 82%, #020617);
+    --sn-control-border: color-mix(in srgb, var(--sn-line-strong) 72%, transparent);
+    --sn-control-hover: color-mix(in srgb, var(--sn-surface-3) 72%, var(--sn-brand) 6%);
+    --sn-control-shadow: 0 10px 24px rgba(0, 0, 0, .16);
+}
+
+html[data-theme="light"] {
+    --sn-control-bg: #ffffff;
+    --sn-control-border: rgba(20, 27, 38, .13);
+    --sn-control-hover: #f5f7fb;
+    --sn-control-shadow: 0 10px 22px rgba(20, 27, 38, .07);
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+select,
+textarea,
+.sn-input,
+.ps-input-text,
+.ps-input-select,
+.spike-chat-search,
+.spike-dm-search,
+.spike-dm-compose-input,
+.spike-dm-compose-input.sn-input,
+#market-search-input,
+#admin-user-search,
+#market-admin-query,
+#global-user-search-input,
+#chat-input,
+#my-custom-status-input {
+    min-height: 46px !important;
+    height: auto !important;
+    padding: 0 16px !important;
+    border: 1px solid var(--sn-control-border) !important;
+    border-radius: 14px !important;
+    background: var(--sn-control-bg) !important;
+    color: var(--sn-text) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03) !important;
+    outline: 0 !important;
+    font: 700 14px/1.2 Inter, system-ui, sans-serif !important;
+    letter-spacing: 0 !important;
+}
+
+textarea {
+    min-height: 118px !important;
+    padding: 14px 16px !important;
+    resize: vertical !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--sn-muted) !important;
+    font-weight: 600 !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+select:focus,
+textarea:focus,
+.sn-input:focus,
+.ps-input-text:focus,
+.ps-input-select:focus,
+.spike-chat-search:focus,
+.spike-dm-search:focus,
+.spike-dm-compose-input:focus,
+#market-search-input:focus,
+#admin-user-search:focus,
+#market-admin-query:focus,
+#global-user-search-input:focus,
+#chat-input:focus,
+#my-custom-status-input:focus {
+    border-color: color-mix(in srgb, var(--sn-brand) 62%, var(--sn-control-border)) !important;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--sn-brand) 18%, transparent) !important;
+}
+
+.spike-market-searchbox,
+.spike-dm-search-wrap,
+.ps-social-search-bar,
+.spike-market-upload-row {
+    border: 1px solid var(--sn-control-border) !important;
+    border-radius: 16px !important;
+    background: var(--sn-control-bg) !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+}
+
+.spike-market-searchbox input,
+.spike-dm-search-wrap input,
+.ps-social-search-bar input,
+.spike-market-upload-row input {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+
+.spike-market-searchbox input:focus,
+.spike-dm-search-wrap input:focus,
+.ps-social-search-bar input:focus,
+.spike-market-upload-row input:focus {
+    box-shadow: none !important;
+}
+
+button,
+.sn-btn,
+.social-action-btn,
+.spike-mini-btn,
+.ps-btn-sync,
+.ps-social-btn,
+.ps-tab-btn,
+.sn-tab,
+.spike-profile-tab,
+.spike-market-tab,
+.spike-market-filter,
+.spike-trade-filter,
+.ps-reaction-btn,
+.spike-channel-btn,
+.spike-voice-channel-btn,
+.spike-filter-toggle {
+    min-height: 44px !important;
+    padding: 0 16px !important;
+    border-radius: 14px !important;
+    border: 1px solid var(--sn-control-border) !important;
+    background: var(--sn-control-bg) !important;
+    color: var(--sn-text) !important;
+    box-shadow: none !important;
+    font: 800 14px/1 Inter, system-ui, sans-serif !important;
+    letter-spacing: 0 !important;
+}
+
+button:hover,
+.sn-btn:hover,
+.social-action-btn:hover,
+.spike-mini-btn:hover,
+.ps-btn-sync:hover,
+.ps-social-btn:hover,
+.ps-tab-btn:hover,
+.sn-tab:hover,
+.spike-profile-tab:hover,
+.spike-market-tab:hover,
+.spike-market-filter:hover,
+.spike-trade-filter:hover,
+.ps-reaction-btn:hover,
+.spike-channel-btn:hover,
+.spike-voice-channel-btn:hover,
+.spike-filter-toggle:hover {
+    background: var(--sn-control-hover) !important;
+    border-color: color-mix(in srgb, var(--sn-brand) 44%, var(--sn-control-border)) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: var(--sn-control-shadow) !important;
+}
+
+.sn-btn-primary,
+button[type="submit"],
+.spike-dm-compose-send,
+.spike-chat-input-zone > button:last-child,
+.spike-market-filter.active,
+.spike-market-tab.active,
+.spike-trade-filter.active,
+.spike-profile-tab.active,
+.ps-tab-btn.active,
+.sn-tab.active {
+    background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%) !important;
+    border-color: rgba(245, 158, 11, .65) !important;
+    color: #111827 !important;
+    box-shadow: 0 12px 24px rgba(245, 158, 11, .18) !important;
+}
+
+.sn-btn-danger,
+.ps-btn-danger,
+.danger {
+    background: color-mix(in srgb, #ef4444 16%, var(--sn-control-bg)) !important;
+    border-color: color-mix(in srgb, #ef4444 46%, var(--sn-control-border)) !important;
+    color: #fecaca !important;
+}
+
+.sn-btn-icon,
+.spike-header-square,
+.spike-dm-top-action,
+.spike-dm-compose-btn,
+.ps-voice-action-btn,
+.ps-settings-close-btn,
+.ps-social-sidebar-close {
+    width: 48px !important;
+    min-width: 48px !important;
+    padding: 0 !important;
+    aspect-ratio: 1 / 1 !important;
+}
+
+.spike-header-tile,
+.spike-store-category,
+.ps-squad-node-btn,
+.ps-squad-create-btn,
+.ps-rail-collapse-btn {
+    font-size: inherit !important;
+}
+
+.spike-market-toolbar {
+    align-items: center !important;
+}
+
+.spike-market-searchbar {
+    gap: 10px !important;
+}
+
+.spike-market-searchbox {
+    min-height: 46px !important;
+}
+
+.spike-market-searchbox svg {
+    color: var(--sn-muted) !important;
+    stroke: currentColor !important;
+}
+
+html[data-theme="light"] .sn-btn-danger,
+html[data-theme="light"] .ps-btn-danger,
+html[data-theme="light"] .danger {
+    color: #991b1b !important;
+}
+
+.spike-top-search input,
+.spike-top-search .sn-input,
+#spike-global-market-search {
+    min-height: 0 !important;
+    height: 100% !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+}
+
+button.spike-hero-banner-link,
+button.spike-hero-banner-link:hover,
+button.spike-hero-banner-link:focus {
+    min-height: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: inherit !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+    color: transparent !important;
+}
+
+/* Control refinement pass: remove double-search frames and kill legacy cheap button skins. */
+.spike-market-searchbar,
+.spike-dm-search-wrap,
+.ps-social-search-bar {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+.spike-market-searchbox,
+.spike-dm-search-wrap:has(input),
+.ps-social-search-bar:has(input) {
+    min-height: 54px !important;
+    height: 54px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 0 18px !important;
+    border: 1px solid color-mix(in srgb, var(--sn-line-strong) 72%, transparent) !important;
+    border-radius: 18px !important;
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--sn-surface-2) 94%, #ffffff 3%), var(--sn-surface-2)) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .04),
+        0 14px 30px rgba(0, 0, 0, .12) !important;
+    overflow: hidden !important;
+}
+
+.spike-market-searchbox:focus-within,
+.spike-dm-search-wrap:focus-within,
+.ps-social-search-bar:focus-within {
+    border-color: color-mix(in srgb, var(--sn-brand) 62%, var(--sn-line-strong)) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .05),
+        0 0 0 4px color-mix(in srgb, var(--sn-brand) 16%, transparent),
+        0 16px 34px rgba(0, 0, 0, .16) !important;
+}
+
+.spike-market-searchbox span {
+    width: 22px !important;
+    min-width: 22px !important;
+    height: 22px !important;
+    display: grid !important;
+    place-items: center !important;
+    color: var(--sn-muted) !important;
+    font-size: 21px !important;
+    line-height: 1 !important;
+}
+
+.spike-market-searchbox input,
+.spike-dm-search-wrap input,
+.ps-social-search-bar input {
+    min-height: 0 !important;
+    height: 100% !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-size: 16px !important;
+    font-weight: 750 !important;
+}
+
+button:not(.spike-hero-banner-link),
+.sn-btn,
+.social-action-btn,
+.spike-mini-btn,
+.ps-btn-sync,
+.ps-social-btn,
+.ps-tab-btn,
+.sn-tab,
+.spike-profile-tab,
+.spike-market-tab,
+.spike-market-filter,
+.spike-trade-filter,
+.ps-reaction-btn,
+.spike-channel-btn,
+.spike-voice-channel-btn,
+.spike-filter-toggle,
+.spike-store-category {
+    position: relative !important;
+    isolation: isolate !important;
+    min-height: 44px !important;
+    padding: 0 17px !important;
+    border-radius: 15px !important;
+    border: 1px solid color-mix(in srgb, var(--sn-line-strong) 70%, transparent) !important;
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--sn-surface-3) 78%, #ffffff 4%), var(--sn-surface-2)) !important;
+    color: var(--sn-text) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .06),
+        0 10px 20px rgba(0, 0, 0, .10) !important;
+    text-shadow: none !important;
+    transform: none !important;
+    transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease !important;
+}
+
+button:not(.spike-hero-banner-link):hover,
+.sn-btn:hover,
+.social-action-btn:hover,
+.spike-mini-btn:hover,
+.ps-btn-sync:hover,
+.ps-social-btn:hover,
+.ps-tab-btn:hover,
+.sn-tab:hover,
+.spike-profile-tab:hover,
+.spike-market-tab:hover,
+.spike-market-filter:hover,
+.spike-trade-filter:hover,
+.ps-reaction-btn:hover,
+.spike-channel-btn:hover,
+.spike-voice-channel-btn:hover,
+.spike-filter-toggle:hover,
+.spike-store-category:hover {
+    transform: translateY(-1px) !important;
+    border-color: color-mix(in srgb, var(--sn-brand) 42%, var(--sn-line-strong)) !important;
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--sn-surface-3) 88%, var(--sn-brand) 5%), color-mix(in srgb, var(--sn-surface-2) 92%, var(--sn-brand) 4%)) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .08),
+        0 16px 30px rgba(0, 0, 0, .16) !important;
+}
+
+button:not(.spike-hero-banner-link):active,
+.sn-btn:active,
+.social-action-btn:active,
+.spike-mini-btn:active,
+.ps-btn-sync:active,
+.ps-social-btn:active,
+.ps-tab-btn:active,
+.sn-tab:active,
+.spike-profile-tab:active,
+.spike-market-tab:active,
+.spike-market-filter:active,
+.spike-trade-filter:active,
+.ps-reaction-btn:active,
+.spike-channel-btn:active,
+.spike-voice-channel-btn:active,
+.spike-filter-toggle:active,
+.spike-store-category:active {
+    transform: translateY(0) scale(.99) !important;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, .18) !important;
+}
+
+.sn-btn-primary,
+button[type="submit"],
+.ps-btn-sync,
+.spike-dm-compose-send,
+.spike-chat-input-zone > button:last-child,
+.spike-market-filter.active,
+.spike-market-tab.active,
+.spike-trade-filter.active,
+.spike-profile-tab.active,
+.ps-tab-btn.active,
+.sn-tab.active,
+.spike-store-category.active {
+    border-color: rgba(245, 158, 11, .72) !important;
+    background:
+        linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%) !important;
+    color: #111827 !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .32),
+        0 16px 34px rgba(245, 158, 11, .22) !important;
+}
+
+.sn-btn-primary:hover,
+button[type="submit"]:hover,
+.ps-btn-sync:hover,
+.spike-dm-compose-send:hover,
+.spike-chat-input-zone > button:last-child:hover,
+.spike-market-filter.active:hover,
+.spike-market-tab.active:hover,
+.spike-trade-filter.active:hover,
+.spike-profile-tab.active:hover,
+.ps-tab-btn.active:hover,
+.sn-tab.active:hover,
+.spike-store-category.active:hover {
+    background:
+        linear-gradient(180deg, #fcd34d 0%, #f59e0b 100%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .38),
+        0 18px 38px rgba(245, 158, 11, .28) !important;
+}
+
+.sn-btn-icon,
+.spike-header-square,
+.spike-dm-top-action,
+.spike-dm-compose-btn,
+.ps-voice-action-btn,
+.ps-settings-close-btn,
+.ps-social-sidebar-close {
+    border-radius: 15px !important;
+}
+
+html[data-theme="light"] .spike-market-searchbox,
+html[data-theme="light"] .spike-dm-search-wrap:has(input),
+html[data-theme="light"] .ps-social-search-bar:has(input) {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .9),
+        0 14px 30px rgba(20, 27, 38, .08) !important;
+}
+
+html[data-theme="light"] button:not(.spike-hero-banner-link),
+html[data-theme="light"] .sn-btn,
+html[data-theme="light"] .social-action-btn,
+html[data-theme="light"] .spike-mini-btn,
+html[data-theme="light"] .ps-social-btn,
+html[data-theme="light"] .ps-tab-btn,
+html[data-theme="light"] .sn-tab,
+html[data-theme="light"] .spike-profile-tab,
+html[data-theme="light"] .spike-market-tab,
+html[data-theme="light"] .spike-market-filter,
+html[data-theme="light"] .spike-trade-filter,
+html[data-theme="light"] .ps-reaction-btn,
+html[data-theme="light"] .spike-channel-btn,
+html[data-theme="light"] .spike-voice-channel-btn,
+html[data-theme="light"] .spike-filter-toggle,
+html[data-theme="light"] .spike-store-category {
+    background: linear-gradient(180deg, #ffffff 0%, #f4f6fa 100%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .95),
+        0 10px 22px rgba(20, 27, 38, .07) !important;
+}
+
+/* Profile modal fixes: global button skins must not move modal close/logout controls. */
+html body #profileCardOverlay .ps-settings-close-btn,
+html body #publicGamerProfileOverlay .ps-settings-close-btn {
+    position: absolute !important;
+    top: 15px !important;
+    right: 20px !important;
+    left: auto !important;
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 !important;
+    border-radius: 14px !important;
+    z-index: 10 !important;
+    line-height: 1 !important;
+    transform: none !important;
+}
+
+html body #profile-data-tab .ps-btn-danger {
+    position: static !important;
+    width: 100% !important;
+    margin-top: 12px !important;
+    min-height: 48px !important;
+}
+
+.auth-links-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+    margin-top: 15px !important;
+}
+
+.auth-links-row .auth-toggle-link {
+    margin-top: 0 !important;
+}
+
+.auth-forgot-password-btn {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--sn-brand) !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    font-size: .88rem !important;
+    font-weight: 800 !important;
+}
+
+.auth-forgot-password-btn:hover {
+    transform: none !important;
+    color: var(--sn-brand-strong, #f59e0b) !important;
+    text-decoration: underline !important;
+}
+
+.auth-password-policy-hint,
+.auth-recovery-note {
+    color: var(--sn-muted) !important;
+    font-size: .78rem !important;
+    line-height: 1.35 !important;
+    margin-top: 8px !important;
+}
+
+.auth-recovery-panel {
+    margin-top: 18px !important;
+    padding: 16px !important;
+    display: grid;
+    gap: 10px !important;
+    border: 1px solid var(--sn-line) !important;
+    border-radius: 18px !important;
+    background: color-mix(in srgb, var(--sn-surface-2) 78%, transparent) !important;
+}
+
+.auth-recovery-panel .sn-input,
+.auth-recovery-panel .sn-btn {
+    width: 100% !important;
+}

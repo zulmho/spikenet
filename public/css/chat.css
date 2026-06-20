@@ -1,0 +1,2091 @@
+/* SpikeNet chat/groups CSS. Extracted from legacy style.css so chat fixes live in one place. */
+
+/* SPIKENET_CHAT_GROUP_FINAL_RESET_EOF */
+html body.group-mode #lobby-panel.open {
+  left: 168px !important;
+  width: calc(100vw - 168px) !important;
+  height: 100vh !important;
+  inset-block: 0 !important;
+  background: var(--sn-bg, #0f1218) !important;
+  overflow: hidden !important;
+}
+
+html body.spike-rail-collapsed.group-mode #lobby-panel.open {
+  left: 80px !important;
+  width: calc(100vw - 80px) !important;
+}
+
+html body.group-mode #lobby-panel.open .lobby-header,
+html body.group-mode #lobby-panel.open .members-list-wrapper {
+  display: none !important;
+}
+
+html body.group-mode #lobby-panel.open .ps-chat-wrapper {
+  height: 100vh !important;
+  min-height: 0 !important;
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: 300px minmax(0, 1fr) !important;
+  grid-template-rows: 72px minmax(0, 1fr) 84px !important;
+  background: var(--sn-bg, #0f1218) !important;
+}
+
+html body.group-mode #lobby-panel.open .ps-channel-sidebar {
+  grid-column: 1 !important;
+  grid-row: 1 / 4 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: 100vh !important;
+  padding: 18px 14px !important;
+  border-right: 1px solid var(--sn-border, rgba(148, 163, 184, .18)) !important;
+  background: var(--sn-panel, #151922) !important;
+  overflow: hidden auto !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-channel-view,
+html body.group-mode #lobby-panel.open #lobby-channel-chat {
+  grid-column: 2 !important;
+  grid-row: 1 / 4 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  width: 100% !important;
+  display: grid !important;
+  grid-template-rows: 72px minmax(0, 1fr) 84px !important;
+  background: var(--sn-chat-bg, #10141c) !important;
+}
+
+html body.group-mode #lobby-panel.open .ps-chat-topbar {
+  grid-row: 1 !important;
+  min-width: 0 !important;
+  height: 72px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 0 24px !important;
+  border-bottom: 1px solid var(--sn-border, rgba(148, 163, 184, .18)) !important;
+  background: var(--sn-panel, #151922) !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages,
+html body.group-mode #lobby-panel.open #chat-messages.ps-chat-screen {
+  grid-row: 2 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 18px 24px 22px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+  overflow: hidden auto !important;
+  background: var(--sn-chat-bg, #10141c) !important;
+  scrollbar-gutter: stable !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages > .ps-msg-block,
+html body.group-mode #lobby-panel.open #chat-messages > .spike-room-message {
+  all: unset !important;
+  box-sizing: border-box !important;
+  display: grid !important;
+  grid-template-columns: 40px minmax(0, auto) !important;
+  column-gap: 10px !important;
+  align-items: start !important;
+  width: fit-content !important;
+  max-width: min(720px, 76%) !important;
+  align-self: flex-start !important;
+  color: var(--sn-text, #f5f7fb) !important;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages > .ps-msg-block.my-msg,
+html body.group-mode #lobby-panel.open #chat-messages > .spike-room-message.my-msg {
+  grid-template-columns: minmax(0, auto) !important;
+  align-self: flex-end !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages > .ps-msg-block.my-msg > .ps-msg-avatar,
+html body.group-mode #lobby-panel.open #chat-messages > .spike-room-message.my-msg > .spike-room-avatar {
+  display: none !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages .ps-msg-avatar,
+html body.group-mode #lobby-panel.open #chat-messages .spike-room-avatar {
+  all: unset !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  border-radius: 14px !important;
+  object-fit: cover !important;
+  background: #1f2530 !important;
+  border: 1px solid var(--sn-border, rgba(148, 163, 184, .20)) !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages .ps-msg-content-zone,
+html body.group-mode #lobby-panel.open #chat-messages .spike-room-body {
+  all: unset !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages .my-msg .ps-msg-content-zone,
+html body.group-mode #lobby-panel.open #chat-messages .my-msg .spike-room-body {
+  align-items: flex-end !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages .ps-msg-meta,
+html body.group-mode #lobby-panel.open #chat-messages .spike-room-meta {
+  all: unset !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+  color: var(--sn-muted, #96a3b8) !important;
+  font: 700 13px/1.2 Inter, "Segoe UI", Arial, sans-serif !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages .ps-msg-author {
+  color: var(--sn-text, #f5f7fb) !important;
+  font-weight: 800 !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages .ps-msg-time {
+  color: var(--sn-muted, #96a3b8) !important;
+  font-size: 12px !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages .ps-msg-text,
+html body.group-mode #lobby-panel.open #chat-messages .spike-room-bubble {
+  all: unset !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  padding: 10px 13px !important;
+  border-radius: 16px !important;
+  border: 1px solid var(--sn-border, rgba(148, 163, 184, .18)) !important;
+  background: var(--sn-bubble, #202633) !important;
+  color: var(--sn-text, #f5f7fb) !important;
+  font: 600 15px/1.35 Inter, "Segoe UI", Arial, sans-serif !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  white-space: pre-wrap !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages .my-msg .ps-msg-text,
+html body.group-mode #lobby-panel.open #chat-messages .my-msg .spike-room-bubble {
+  background: var(--sn-brand, #f5a415) !important;
+  color: #16110a !important;
+  border-color: rgba(245, 164, 21, .55) !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages .spike-room-media {
+  padding: 6px !important;
+  background: var(--sn-bubble, #202633) !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-messages .ps-chat-img-payload {
+  display: block !important;
+  width: min(360px, 60vw) !important;
+  max-width: 100% !important;
+  max-height: 260px !important;
+  border-radius: 12px !important;
+  object-fit: cover !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-chat-meta-row {
+  display: none !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-chat-input-zone {
+  grid-column: 2 !important;
+  grid-row: 3 !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: 84px !important;
+  min-height: 84px !important;
+  margin: 0 !important;
+  padding: 13px 24px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 132px !important;
+  gap: 12px !important;
+  align-items: center !important;
+  border-top: 1px solid var(--sn-border, rgba(148, 163, 184, .18)) !important;
+  background: var(--sn-panel, #151922) !important;
+}
+
+html body.group-mode #lobby-panel.open #chat-input {
+  width: 100% !important;
+  height: 56px !important;
+  min-height: 56px !important;
+  padding: 0 18px !important;
+  border-radius: 18px !important;
+}
+
+html body.group-mode #lobby-panel.open #send-chat-message {
+  height: 56px !important;
+  border-radius: 18px !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-msg-tools,
+html body.group-mode #lobby-panel.open .ps-chat-reactions-bar {
+  display: none !important;
+}
+
+html body.chat-mode .spike-chat-dock.open {
+  left: 168px !important;
+  width: calc(100vw - 168px) !important;
+  height: 100vh !important;
+  display: grid !important;
+  grid-template-columns: 360px minmax(0, 1fr) !important;
+  grid-template-rows: 100vh !important;
+  overflow: hidden !important;
+}
+
+html body.spike-rail-collapsed.chat-mode .spike-chat-dock.open {
+  left: 80px !important;
+  width: calc(100vw - 80px) !important;
+}
+
+html body.chat-mode .spike-chat-dock-list {
+  grid-column: 1 !important;
+  min-width: 0 !important;
+  height: 100vh !important;
+  overflow: hidden auto !important;
+  border-right: 1px solid var(--sn-border, rgba(148, 163, 184, .18)) !important;
+  background: var(--sn-panel, #151922) !important;
+}
+
+html body.chat-mode #spike-chat-dock-view {
+  grid-column: 2 !important;
+  min-width: 0 !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+html body.chat-mode .spike-chat-dock .ps-dm-chat-container,
+html body.chat-mode .spike-chat-dock .ps-dm-chat-container > .ps-dm-chat-container {
+  height: 100vh !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-rows: 88px auto minmax(0, 1fr) 92px !important;
+  background: var(--sn-chat-bg, #10141c) !important;
+}
+
+html body.chat-mode .spike-chat-dock .ps-dm-messages-area {
+  min-height: 0 !important;
+  height: 100% !important;
+  padding: 20px 24px !important;
+  overflow: hidden auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  background: var(--sn-chat-bg, #10141c) !important;
+  scrollbar-gutter: stable !important;
+}
+
+html body.chat-mode .ps-dm-msg-bubble {
+  max-width: min(680px, 72%) !important;
+  width: fit-content !important;
+  padding: 10px 14px !important;
+  border-radius: 16px !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  white-space: pre-wrap !important;
+}
+
+html body.chat-mode .ps-dm-msg.own .ps-dm-msg-bubble {
+  margin-left: auto !important;
+}
+
+html body.chat-mode .spike-dm-link-preview,
+html body.chat-mode .spike-dm-file-link {
+  display: inline-flex !important;
+  max-width: 100% !important;
+  padding: 7px 10px !important;
+  border-radius: 10px !important;
+  background: rgba(15, 18, 24, .22) !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  overflow-wrap: anywhere !important;
+}
+
+html body.chat-mode .spike-chat-dock .ps-dm-input-zone {
+  height: 92px !important;
+  min-height: 92px !important;
+  padding: 16px 24px !important;
+  border-top: 1px solid var(--sn-border, rgba(148, 163, 184, .18)) !important;
+  background: var(--sn-panel, #151922) !important;
+}
+
+html body.chat-mode .spike-chat-dock .ps-dm-input {
+  height: 58px !important;
+  border-radius: 18px !important;
+}
+
+html[data-theme="light"] body.group-mode #lobby-panel.open,
+html[data-theme="light"] body.group-mode #lobby-panel.open .ps-chat-wrapper,
+html[data-theme="light"] body.chat-mode .spike-chat-dock.open {
+  --sn-bg: #f4f5f7;
+  --sn-panel: #ffffff;
+  --sn-chat-bg: #f7f8fa;
+  --sn-bubble: #ffffff;
+  --sn-text: #151923;
+  --sn-muted: #6f7786;
+  --sn-border: rgba(22, 28, 39, .12);
+}
+
+@media (max-width: 980px) {
+  html body.group-mode #lobby-panel.open,
+  html body.spike-rail-collapsed.group-mode #lobby-panel.open,
+  html body.chat-mode .spike-chat-dock.open,
+  html body.spike-rail-collapsed.chat-mode .spike-chat-dock.open {
+    left: 0 !important;
+    width: 100vw !important;
+  }
+
+  html body.group-mode #lobby-panel.open .ps-chat-wrapper,
+  html body.group-mode #lobby-panel.open #lobby-channel-chat {
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+  }
+
+  html body.group-mode #lobby-panel.open .ps-channel-sidebar {
+    padding: 12px 8px !important;
+  }
+
+  html body.chat-mode .spike-chat-dock.open {
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+  }
+}
+
+/* SPIKENET_CHAT_GROUP_ACTUAL_DOM_PATCH_EOF */
+html body.group-mode #lobby-panel.open .spike-lobby-channels {
+  grid-column: 1 !important;
+  grid-row: 1 / 4 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 100vh !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 18px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  border-right: 1px solid var(--sn-border, rgba(148, 163, 184, .18)) !important;
+  background: var(--sn-panel, #151922) !important;
+  overflow: hidden auto !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-discord-channel-header {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: 72px !important;
+  margin: 0 !important;
+  padding: 0 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  border-bottom: 1px solid var(--sn-border, rgba(148, 163, 184, .18)) !important;
+  background: var(--sn-panel, #151922) !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-discord-channel-header > div:first-child {
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 10px !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-discord-channel-title {
+  white-space: nowrap !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-discord-channel-topic {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-discord-header-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-discord-header-actions .social-action-btn:nth-last-child(-n+2) {
+  display: none !important;
+}
+
+html body.group-mode #lobby-panel.open #spike-pinned-message,
+html body.group-mode #lobby-panel.open #spike-game-night-panel {
+  display: none !important;
+}
+
+html body.group-mode #lobby-panel.open #lobby-channel-chat {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-channel-view:not(.active) {
+  display: none !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-chat-input-zone > button:last-child {
+  height: 56px !important;
+  min-width: 132px !important;
+  border-radius: 18px !important;
+  padding: 0 20px !important;
+}
+
+html body.group-mode #lobby-panel.open .spike-sidebar-voice-panel {
+  margin-top: auto !important;
+  flex-shrink: 0 !important;
+}
+
+html body.chat-mode .ps-dm-msg-bubble > *,
+html body.chat-mode .ps-dm-msg-bubble {
+  max-width: min(680px, 72vw) !important;
+}
+
+/* SPIKENET_CHAT_DOCK_GRID_FIX_EOF */
+html body.chat-mode .spike-chat-dock.open {
+  display: grid !important;
+  grid-template-columns: 360px minmax(0, 1fr) !important;
+  grid-template-rows: 86px minmax(0, 1fr) !important;
+  align-items: stretch !important;
+}
+
+html body.chat-mode .spike-chat-dock-header {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  height: 86px !important;
+  min-height: 86px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 26px !important;
+  border-right: 1px solid var(--sn-border, rgba(148, 163, 184, .18)) !important;
+  border-bottom: 1px solid var(--sn-border, rgba(148, 163, 184, .18)) !important;
+  background: var(--sn-panel, #151922) !important;
+}
+
+html body.chat-mode .spike-chat-dock-list {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 18px 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  overflow: hidden auto !important;
+}
+
+html body.chat-mode #spike-chat-dock-view {
+  grid-column: 2 !important;
+  grid-row: 1 / 3 !important;
+  height: 100vh !important;
+  min-height: 0 !important;
+  border-left: 1px solid var(--sn-border, rgba(148, 163, 184, .18)) !important;
+}
+
+html body.chat-mode .spike-chat-tabs {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  margin: 0 0 4px !important;
+}
+
+html body.chat-mode .spike-chat-tabs button {
+  min-height: 48px !important;
+  border-radius: 14px !important;
+  border: 1px solid var(--sn-border, rgba(148, 163, 184, .18)) !important;
+  background: var(--sn-bg, #0f1218) !important;
+  color: var(--sn-muted, #96a3b8) !important;
+  font-weight: 850 !important;
+}
+
+html body.chat-mode .spike-chat-tabs button.active {
+  border-color: rgba(245, 164, 21, .55) !important;
+  background: rgba(245, 164, 21, .12) !important;
+  color: var(--sn-text, #f5f7fb) !important;
+}
+
+html body.chat-mode .spike-empty-state {
+  margin-top: 10px !important;
+  padding: 18px !important;
+  border-radius: 18px !important;
+  border: 1px dashed var(--sn-border, rgba(148, 163, 184, .22)) !important;
+  background: rgba(255, 255, 255, .025) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+html body.chat-mode .spike-chat-row {
+  min-height: 72px !important;
+  padding: 12px 14px !important;
+  border-radius: 18px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+@media (max-width: 980px) {
+  html body.chat-mode .spike-chat-dock.open {
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+    grid-template-rows: 76px minmax(0, 1fr) !important;
+  }
+
+  html body.chat-mode .spike-chat-dock-header {
+    height: 76px !important;
+    min-height: 76px !important;
+    padding: 0 10px !important;
+  }
+}
+
+/* SPIKENET_SOCIAL_HUB_CORE */
+html body.chat-mode.social-hub-mode .spike-chat-dock.open {
+  left: 168px !important;
+  width: calc(100vw - 168px) !important;
+  height: 100vh !important;
+  display: grid !important;
+  grid-template-columns: 340px minmax(0, 1fr) !important;
+  grid-template-rows: 72px minmax(0, 1fr) !important;
+  overflow: hidden !important;
+  background: var(--sn-page) !important;
+}
+
+html body.spike-rail-collapsed.chat-mode.social-hub-mode .spike-chat-dock.open {
+  left: 80px !important;
+  width: calc(100vw - 80px) !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-chat-dock-header {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  padding: 0 18px !important;
+  background: var(--sn-surface) !important;
+  border-right: 1px solid var(--sn-line) !important;
+  border-bottom: 1px solid var(--sn-line) !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-chat-dock-list {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  overflow: hidden auto !important;
+  background: var(--sn-surface) !important;
+  border-right: 1px solid var(--sn-line) !important;
+}
+
+html body.chat-mode.social-hub-mode #spike-chat-dock-view {
+  grid-column: 2 !important;
+  grid-row: 1 / 3 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+  background: var(--sn-page-soft) !important;
+  border-left: 0 !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-chat-tabs {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 2 !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  padding-bottom: 6px !important;
+  background: var(--sn-surface) !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-chat-section {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-chat-section + .spike-chat-section {
+  margin-top: 12px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid var(--sn-line) !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-chat-section-label {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 24px !important;
+  padding: 0 4px !important;
+  color: var(--sn-muted) !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-chat-section-label span {
+  min-width: 22px !important;
+  height: 22px !important;
+  padding: 0 7px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 999px !important;
+  background: var(--sn-brand) !important;
+  color: #17110a !important;
+  font-size: 12px !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-empty-state.compact {
+  min-height: auto !important;
+  margin: 0 !important;
+  padding: 12px !important;
+  align-items: stretch !important;
+  text-align: left !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-chat-row {
+  width: 100% !important;
+  min-height: 64px !important;
+  padding: 10px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-radius: 14px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-chat-row.active {
+  background: color-mix(in srgb, var(--sn-brand) 14%, var(--sn-surface-2)) !important;
+  border-color: color-mix(in srgb, var(--sn-brand) 42%, var(--sn-line)) !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-chat-row-main {
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-chat-row-name {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-chat-row-name small {
+  display: block !important;
+  margin-top: 2px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-chat-dock .ps-dm-chat-container,
+html body.chat-mode.social-hub-direct-active .spike-chat-dock .ps-dm-chat-container > .ps-dm-chat-container {
+  height: 100vh !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-rows: 72px auto auto minmax(0, 1fr) 76px !important;
+  background: var(--sn-page-soft) !important;
+}
+
+html body.chat-mode.social-hub-direct-active .ps-dm-chat-header {
+  min-height: 72px !important;
+  padding: 0 22px !important;
+  border-bottom: 1px solid var(--sn-line) !important;
+  background: var(--sn-surface) !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-tools {
+  padding: 10px 16px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  gap: 10px !important;
+  border-bottom: 1px solid var(--sn-line) !important;
+  background: var(--sn-surface) !important;
+}
+
+html body.chat-mode.social-hub-direct-active .ps-dm-messages-area {
+  min-height: 0 !important;
+  height: 100% !important;
+  padding: 18px 22px !important;
+  overflow: hidden auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  background: var(--sn-page-soft) !important;
+}
+
+html body.chat-mode.social-hub-direct-active .ps-dm-msg-bubble {
+  max-width: min(680px, 72%) !important;
+  width: fit-content !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  white-space: pre-wrap !important;
+}
+
+html body.chat-mode.social-hub-direct-active .ps-dm-msg-bubble.my-msg {
+  align-self: flex-end !important;
+  margin-left: auto !important;
+}
+
+html body.chat-mode.social-hub-direct-active .ps-dm-msg-bubble.their-msg {
+  align-self: flex-start !important;
+  margin-right: auto !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-attachment {
+  display: block !important;
+  width: min(420px, 64vw) !important;
+  max-width: 100% !important;
+  max-height: 320px !important;
+  object-fit: contain !important;
+  border-radius: 14px !important;
+}
+
+html body.chat-mode.social-hub-mode .spike-message-link,
+html body.chat-mode.social-hub-mode .spike-dm-link-preview,
+html body.chat-mode.social-hub-mode .spike-dm-file-link {
+  max-width: 100% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 6px 9px !important;
+  border-radius: 10px !important;
+  background: color-mix(in srgb, var(--sn-info) 12%, var(--sn-surface-2)) !important;
+  border: 1px solid color-mix(in srgb, var(--sn-info) 24%, var(--sn-line)) !important;
+  color: var(--sn-text) !important;
+  text-decoration: none !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+html body.chat-mode.social-hub-direct-active .ps-dm-input-zone {
+  min-height: 76px !important;
+  height: 76px !important;
+  padding: 10px 16px !important;
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) 48px !important;
+  gap: 10px !important;
+  align-items: center !important;
+  border-top: 1px solid var(--sn-line) !important;
+  background: var(--sn-surface) !important;
+}
+
+html body.chat-mode.social-hub-group-active #spike-chat-dock-view #lobby-panel.open {
+  all: unset !important;
+  box-sizing: border-box !important;
+  display: grid !important;
+  position: relative !important;
+  width: 100% !important;
+  height: 100vh !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  background: var(--sn-page-soft) !important;
+  color: var(--sn-text) !important;
+  font-family: var(--sn-font) !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .lobby-header,
+html body.chat-mode.social-hub-group-active #lobby-panel.open .status-panel-wrapper,
+html body.chat-mode.social-hub-group-active #lobby-panel.open .ps-members-title,
+html body.chat-mode.social-hub-group-active #lobby-panel.open .members-list-wrapper {
+  display: none !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .ps-chat-wrapper {
+  all: unset !important;
+  box-sizing: border-box !important;
+  display: grid !important;
+  grid-template-columns: 252px minmax(0, 1fr) !important;
+  grid-template-rows: 72px minmax(0, 1fr) 76px !important;
+  width: 100% !important;
+  height: 100vh !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  background: var(--sn-page-soft) !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-lobby-channels {
+  grid-column: 1 !important;
+  grid-row: 1 / 4 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 14px 12px 92px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  overflow: hidden auto !important;
+  background: var(--sn-surface) !important;
+  border-right: 1px solid var(--sn-line) !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-discord-channel-header {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+  min-height: 72px !important;
+  padding: 0 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+  overflow: hidden !important;
+  background: var(--sn-surface) !important;
+  border-bottom: 1px solid var(--sn-line) !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-discord-channel-header > div:first-child {
+  min-width: 0 !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-discord-channel-topic {
+  display: inline-block !important;
+  max-width: 38vw !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-discord-header-actions {
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-discord-header-actions .social-action-btn:nth-last-child(-n+2) {
+  display: none !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open #spike-pinned-message,
+html body.chat-mode.social-hub-group-active #lobby-panel.open #spike-game-night-panel {
+  display: none !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-channel-view {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden auto !important;
+  background: var(--sn-page-soft) !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-channel-view:not(.active) {
+  display: none !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open #lobby-channel-chat.active {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open #chat-messages {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 18px 22px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 11px !important;
+  overflow: hidden auto !important;
+  scrollbar-gutter: stable !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open #chat-messages > .ps-msg-block {
+  all: unset !important;
+  box-sizing: border-box !important;
+  display: grid !important;
+  grid-template-columns: 38px minmax(0, auto) !important;
+  column-gap: 10px !important;
+  align-items: start !important;
+  width: fit-content !important;
+  max-width: min(720px, 78%) !important;
+  align-self: flex-start !important;
+  color: var(--sn-text) !important;
+  font-family: var(--sn-font) !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open #chat-messages > .ps-msg-block.my-msg {
+  grid-template-columns: minmax(0, auto) !important;
+  align-self: flex-end !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open #chat-messages > .ps-msg-block.my-msg > .ps-msg-avatar {
+  display: none !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-room-body {
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .my-msg .spike-room-body {
+  align-items: flex-end !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-room-bubble {
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  white-space: pre-wrap !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .ps-chat-img-payload {
+  display: block !important;
+  width: min(420px, 56vw) !important;
+  max-width: 100% !important;
+  max-height: 320px !important;
+  object-fit: contain !important;
+  border-radius: 14px !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-message-link {
+  margin-top: 2px !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-msg-tools,
+html body.chat-mode.social-hub-group-active #lobby-panel.open .ps-chat-reactions-bar {
+  display: none !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-chat-meta-row {
+  display: none !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-reply-preview {
+  grid-column: 2 !important;
+  grid-row: 3 !important;
+  align-self: start !important;
+  margin: -44px 18px 0 !important;
+  z-index: 3 !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-chat-input-zone {
+  grid-column: 2 !important;
+  grid-row: 3 !important;
+  min-width: 0 !important;
+  height: 76px !important;
+  min-height: 76px !important;
+  margin: 0 !important;
+  padding: 10px 18px !important;
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) 132px !important;
+  gap: 10px !important;
+  align-items: center !important;
+  background: var(--sn-surface) !important;
+  border-top: 1px solid var(--sn-line) !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open #chat-input {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 52px !important;
+  padding: 0 16px !important;
+  border-radius: 16px !important;
+}
+
+html body.chat-mode.social-hub-group-active #lobby-panel.open #spike-voice-dock {
+  position: absolute !important;
+  left: 12px !important;
+  bottom: 10px !important;
+  width: 228px !important;
+  z-index: 4 !important;
+}
+
+@media (max-width: 1100px) {
+  html body.chat-mode.social-hub-mode .spike-chat-dock.open,
+  html body.spike-rail-collapsed.chat-mode.social-hub-mode .spike-chat-dock.open {
+    left: 0 !important;
+    width: 100vw !important;
+    grid-template-columns: 300px minmax(0, 1fr) !important;
+  }
+
+  html body.chat-mode.social-hub-group-active #lobby-panel.open .ps-chat-wrapper {
+    grid-template-columns: 220px minmax(0, 1fr) !important;
+  }
+
+  html body.chat-mode.social-hub-group-active #lobby-panel.open #spike-voice-dock {
+    width: 196px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  html body.chat-mode.social-hub-mode .spike-chat-dock.open {
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+  }
+
+  html body.chat-mode.social-hub-mode .spike-chat-dock-header {
+    padding: 0 8px !important;
+  }
+
+  html body.chat-mode.social-hub-mode .spike-chat-dock-title {
+    display: none !important;
+  }
+
+  html body.chat-mode.social-hub-mode .spike-chat-dock-list {
+    padding: 10px 8px !important;
+  }
+
+  html body.chat-mode.social-hub-mode .spike-chat-tabs {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body.chat-mode.social-hub-mode .spike-chat-section-label {
+    justify-content: center !important;
+    font-size: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body.chat-mode.social-hub-mode .spike-chat-section-label::before {
+    content: "•";
+    font-size: 18px !important;
+  }
+
+  html body.chat-mode.social-hub-mode .spike-chat-section-label span {
+    display: none !important;
+  }
+
+  html body.chat-mode.social-hub-mode .spike-empty-state.compact {
+    display: none !important;
+  }
+
+  html body.chat-mode.social-hub-mode .spike-chat-row {
+    justify-content: center !important;
+    padding: 9px !important;
+  }
+
+  html body.chat-mode.social-hub-mode .spike-chat-row-name,
+  html body.chat-mode.social-hub-mode .spike-chat-row-name small {
+    display: none !important;
+  }
+
+  html body.chat-mode.social-hub-group-active #lobby-panel.open .ps-chat-wrapper {
+    grid-template-columns: 74px minmax(0, 1fr) !important;
+  }
+
+  html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-lobby-channels {
+    padding: 10px 6px !important;
+  }
+
+  html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-channel-category {
+    display: none !important;
+  }
+
+  html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-channel-btn {
+    min-height: 46px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    font-size: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-channel-btn::before {
+    content: "#";
+    font-size: 18px !important;
+    font-weight: 900 !important;
+    color: var(--sn-text) !important;
+  }
+
+  html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-voice-channel-btn::before {
+    content: "♪";
+  }
+
+  html body.chat-mode.social-hub-group-active #lobby-panel.open #spike-voice-dock {
+    display: none !important;
+  }
+
+  html body.chat-mode.social-hub-group-active #lobby-panel.open .spike-chat-input-zone {
+    grid-template-columns: 44px minmax(0, 1fr) 54px !important;
+  }
+}
+/* Direct chats use the same visual language as group channels. */
+html body.chat-mode.social-hub-direct-active .spike-chat-dock .ps-dm-chat-container,
+html body.chat-mode.social-hub-direct-active .spike-chat-dock .ps-dm-chat-container > .ps-dm-chat-container {
+  height: 100vh !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-rows: 72px auto auto minmax(0, 1fr) 78px !important;
+  background: var(--sn-page-soft) !important;
+}
+
+html body.chat-mode.social-hub-direct-active .ps-dm-chat-header.spike-discord-channel-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 72px !important;
+  padding: 0 24px !important;
+  border-bottom: 1px solid var(--sn-line) !important;
+  background: var(--sn-surface) !important;
+}
+
+html body.chat-mode.social-hub-direct-active .ps-dm-chat-header .spike-discord-channel-title {
+  font-size: 1rem !important;
+  font-weight: 900 !important;
+}
+
+html body.chat-mode.social-hub-direct-active .ps-dm-chat-header .spike-discord-channel-topic {
+  color: var(--sn-muted) !important;
+  font-size: 0.78rem !important;
+  font-weight: 800 !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-tools {
+  padding: 10px 16px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  gap: 10px !important;
+  border-bottom: 1px solid var(--sn-line) !important;
+  background: var(--sn-surface) !important;
+}
+
+html body.chat-mode.social-hub-direct-active .ps-dm-messages-area {
+  min-height: 0 !important;
+  height: 100% !important;
+  padding: 18px 24px !important;
+  overflow: hidden auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  background: var(--sn-page-soft) !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-message {
+  width: 100% !important;
+  display: flex !important;
+  gap: 12px !important;
+  align-items: flex-start !important;
+  position: relative !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-message.my-msg {
+  flex-direction: row-reverse !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-message .spike-room-body {
+  max-width: min(760px, 72%) !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-message.my-msg .spike-room-body {
+  align-items: flex-end !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-message .ps-dm-msg-bubble {
+  width: fit-content !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  align-self: auto !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  white-space: pre-wrap !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-message.my-msg .ps-dm-msg-bubble {
+  background: var(--spike-accent) !important;
+  color: #111318 !important;
+  border-color: color-mix(in srgb, var(--spike-accent) 72%, #000 14%) !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-message.my-msg .spike-room-meta {
+  justify-content: flex-end !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-message .ps-msg-del-bucket {
+  position: absolute !important;
+  top: 2px !important;
+  right: 0 !important;
+  opacity: 0 !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-message:hover .ps-msg-del-bucket {
+  opacity: 1 !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-actions,
+html body.chat-mode.social-hub-direct-active .spike-dm-reactions {
+  margin-top: 6px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-action,
+html body.chat-mode.social-hub-direct-active .spike-dm-reaction {
+  min-height: 26px !important;
+  padding: 4px 8px !important;
+  border-radius: 999px !important;
+  font-size: 0.76rem !important;
+}
+
+html body.chat-mode.social-hub-direct-active .spike-dm-attachment {
+  display: block !important;
+  width: min(420px, 64vw) !important;
+  max-width: 100% !important;
+  max-height: 320px !important;
+  object-fit: contain !important;
+  border-radius: 12px !important;
+}
+
+html body.chat-mode.social-hub-direct-active .ps-dm-input-zone.spike-chat-input-zone {
+  min-height: 78px !important;
+  height: 78px !important;
+  padding: 10px 18px !important;
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) 48px !important;
+  gap: 10px !important;
+  align-items: center !important;
+  border-top: 1px solid var(--sn-line) !important;
+  background: var(--sn-surface) !important;
+}
+
+html body.chat-mode.social-hub-direct-active .ps-dm-input-zone .ps-dm-input {
+  width: 100% !important;
+  min-height: 48px !important;
+}
+
+@media (max-width: 760px) {
+  html body.chat-mode.social-hub-direct-active .ps-dm-chat-header.spike-discord-channel-header {
+    padding: 0 12px !important;
+  }
+
+  html body.chat-mode.social-hub-direct-active .spike-dm-message .spike-room-body {
+    max-width: calc(100% - 54px) !important;
+  }
+
+  html body.chat-mode.social-hub-direct-active .spike-dm-tools {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Elite DM redesign: separate premium messenger, not group-clone. */
+html body.chat-mode .spike-chat-dock.open {
+  background: #0f131a !important;
+}
+
+html body.chat-mode #spike-chat-dock-view {
+  background:
+    radial-gradient(circle at 80% 0%, rgba(245, 164, 0, 0.10), transparent 34%),
+    linear-gradient(180deg, #111720, #0d1118) !important;
+}
+
+html body.chat-mode .spike-chat-dock-list {
+  background: #141922 !important;
+  border-right: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+html body.chat-mode .spike-chat-row {
+  border-radius: 18px !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body.chat-mode .spike-chat-row:hover,
+html body.chat-mode .spike-chat-row.active {
+  background: rgba(255,255,255,0.06) !important;
+  border-color: rgba(245, 164, 0, 0.32) !important;
+}
+
+html body.chat-mode .spike-chat-row.active {
+  box-shadow: inset 3px 0 0 var(--spike-accent) !important;
+}
+
+html body.chat-mode .spike-dm-elite,
+html body.chat-mode .spike-dm-shell {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+html body.chat-mode .spike-dm-shell,
+html body.chat-mode .spike-chat-dock .spike-dm-shell,
+html body.chat-mode .spike-chat-dock .spike-dm-shell > * {
+  box-sizing: border-box !important;
+}
+
+html body.chat-mode .spike-dm-shell {
+  display: grid !important;
+  grid-template-rows: 78px auto auto minmax(0, 1fr) 28px 86px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}
+
+html body.chat-mode .spike-dm-topbar {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  gap: 14px !important;
+  align-items: center !important;
+  min-height: 78px !important;
+  padding: 12px 22px !important;
+  background: rgba(18, 24, 33, 0.88) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(18px) !important;
+}
+
+html body.chat-mode .spike-dm-back,
+html body.chat-mode .spike-dm-top-action,
+html body.chat-mode .spike-dm-compose-btn,
+html body.chat-mode .spike-dm-compose-send {
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  background: rgba(255,255,255,0.06) !important;
+  color: var(--sn-text) !important;
+}
+
+html body.chat-mode .spike-dm-peer {
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+html body.chat-mode .spike-dm-peer-avatar-wrap {
+  position: relative !important;
+  width: 48px !important;
+  height: 48px !important;
+  flex: 0 0 48px !important;
+}
+
+html body.chat-mode .spike-dm-peer-avatar {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 16px !important;
+  object-fit: cover !important;
+}
+
+html body.chat-mode .spike-dm-peer-status {
+  position: absolute !important;
+  right: -2px !important;
+  bottom: -2px !important;
+  width: 13px !important;
+  height: 13px !important;
+  border-radius: 999px !important;
+  background: #22c55e !important;
+  border: 3px solid #121821 !important;
+}
+
+html body.chat-mode .spike-dm-peer-name {
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--sn-text) !important;
+  box-shadow: none !important;
+  font-size: 1.05rem !important;
+  font-weight: 950 !important;
+  text-align: left !important;
+}
+
+html body.chat-mode .spike-dm-peer-subtitle {
+  color: var(--sn-muted) !important;
+  font-size: 0.78rem !important;
+  font-weight: 800 !important;
+}
+
+html body.chat-mode .spike-dm-actions-top {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+html body.chat-mode .spike-dm-command-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 38%) !important;
+  gap: 12px !important;
+  align-items: center !important;
+  padding: 12px 22px !important;
+  background: rgba(13, 17, 24, 0.72) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+}
+
+html body.chat-mode .spike-dm-pinned {
+  min-height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 14px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(245, 164, 0, 0.22) !important;
+  background: rgba(245, 164, 0, 0.08) !important;
+  color: var(--sn-text) !important;
+}
+
+html body.chat-mode .spike-dm-pinned:not(.active) {
+  opacity: 0.52 !important;
+}
+
+html body.chat-mode .spike-dm-pinned:not(.active)::before {
+  content: "Закрепов пока нет" !important;
+  color: var(--sn-muted) !important;
+  font-weight: 800 !important;
+}
+
+html body.chat-mode .spike-dm-search-wrap {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  gap: 8px !important;
+}
+
+html body.chat-mode .spike-dm-search,
+html body.chat-mode .spike-dm-compose-input {
+  border-radius: 18px !important;
+  background: rgba(255,255,255,0.055) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+}
+
+html body.chat-mode .spike-dm-timeline {
+  min-height: 0 !important;
+  height: 100% !important;
+  padding: 24px 30px !important;
+  overflow: hidden auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important;
+  background:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px) !important;
+  background-size: 44px 44px !important;
+}
+
+html body.chat-mode .spike-dm-message {
+  width: 100% !important;
+  display: flex !important;
+  gap: 12px !important;
+  align-items: flex-start !important;
+}
+
+html body.chat-mode .spike-dm-message.my-msg {
+  flex-direction: row-reverse !important;
+}
+
+html body.chat-mode .spike-dm-message-avatar {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 14px !important;
+  flex: 0 0 38px !important;
+  object-fit: cover !important;
+}
+
+html body.chat-mode .spike-dm-message-stack {
+  max-width: min(740px, 72%) !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 6px !important;
+}
+
+html body.chat-mode .spike-dm-message.my-msg .spike-dm-message-stack {
+  align-items: flex-end !important;
+}
+
+html body.chat-mode .spike-dm-message-meta {
+  display: flex !important;
+  gap: 8px !important;
+  align-items: center !important;
+  color: var(--sn-muted) !important;
+  font-size: 0.78rem !important;
+  font-weight: 800 !important;
+}
+
+html body.chat-mode .spike-dm-message-meta strong {
+  color: var(--sn-text) !important;
+}
+
+html body.chat-mode .spike-dm-bubble {
+  width: fit-content !important;
+  max-width: 100% !important;
+  padding: 13px 15px !important;
+  border-radius: 18px 18px 18px 6px !important;
+  background: #1b222d !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.18) !important;
+  color: var(--sn-text) !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  white-space: pre-wrap !important;
+}
+
+html body.chat-mode .spike-dm-message.my-msg .spike-dm-bubble {
+  border-radius: 18px 18px 6px 18px !important;
+  background: linear-gradient(135deg, #f5a400, #ffbf3f) !important;
+  color: #111318 !important;
+  border-color: rgba(245, 164, 0, 0.55) !important;
+}
+
+html body.chat-mode .spike-dm-message-tools {
+  opacity: 0 !important;
+  transform: translateY(-2px) !important;
+  pointer-events: none !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  transition: opacity .16s ease, transform .16s ease !important;
+}
+
+html body.chat-mode .spike-dm-message:hover .spike-dm-message-tools {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+html body.chat-mode .spike-dm-tool {
+  min-height: 28px !important;
+  padding: 4px 9px !important;
+  border-radius: 999px !important;
+  font-size: 0.75rem !important;
+  background: rgba(255,255,255,0.06) !important;
+}
+
+html body.chat-mode .spike-dm-tool.danger {
+  color: #fecaca !important;
+  border-color: rgba(239, 68, 68, 0.38) !important;
+  background: rgba(239, 68, 68, 0.12) !important;
+}
+
+html body.chat-mode .spike-dm-reactions {
+  margin-top: 8px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+
+html body.chat-mode .spike-dm-reaction {
+  min-height: 24px !important;
+  padding: 3px 8px !important;
+  border-radius: 999px !important;
+  font-size: 0.72rem !important;
+}
+
+html body.chat-mode .spike-dm-typing {
+  min-height: 28px !important;
+  padding: 4px 30px !important;
+  color: var(--sn-muted) !important;
+  font-weight: 800 !important;
+}
+
+html body.chat-mode .spike-dm-composer {
+  height: 86px !important;
+  min-height: 86px !important;
+  display: grid !important;
+  grid-template-columns: 52px minmax(0, 1fr) 52px !important;
+  gap: 12px !important;
+  align-items: center !important;
+  padding: 14px 22px !important;
+  background: rgba(18, 24, 33, 0.92) !important;
+  border-top: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+html[data-theme="light"] body.chat-mode #spike-chat-dock-view {
+  background: #f5f6f8 !important;
+}
+
+html[data-theme="light"] body.chat-mode .spike-chat-dock-list,
+html[data-theme="light"] body.chat-mode .spike-dm-topbar,
+html[data-theme="light"] body.chat-mode .spike-dm-composer {
+  background: #ffffff !important;
+  border-color: rgba(17,19,24,0.10) !important;
+}
+
+html[data-theme="light"] body.chat-mode .spike-dm-bubble {
+  background: #ffffff !important;
+  border-color: rgba(17,19,24,0.10) !important;
+  box-shadow: 0 14px 32px rgba(17,19,24,0.08) !important;
+}
+
+@media (max-width: 860px) {
+  html body.chat-mode .spike-dm-command-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body.chat-mode .spike-dm-actions-top .spike-dm-top-action:not(:first-child) {
+    display: none !important;
+  }
+
+  html body.chat-mode .spike-dm-message-stack {
+    max-width: calc(100% - 52px) !important;
+  }
+}
+
+/* Compact DM pass: right-click actions, dense readable messages. */
+html body.chat-mode .spike-dm-shell {
+  grid-template-rows: 68px auto minmax(0, 1fr) 22px 74px !important;
+}
+
+html body.chat-mode .spike-dm-call-banner:not(.active) {
+  display: none !important;
+}
+
+html body.chat-mode .spike-dm-call-banner.active {
+  display: flex !important;
+  min-height: 44px !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 8px 18px !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+  background: rgba(20, 184, 166, 0.14) !important;
+}
+
+html body.chat-mode .spike-dm-topbar {
+  min-height: 68px !important;
+  padding: 9px 18px !important;
+}
+
+html body.chat-mode .spike-dm-peer-avatar-wrap,
+html body.chat-mode .spike-dm-peer-avatar {
+  width: 42px !important;
+  height: 42px !important;
+}
+
+html body.chat-mode .spike-dm-peer-name {
+  font-size: 1rem !important;
+}
+
+html body.chat-mode .spike-dm-peer-subtitle {
+  font-size: 0.74rem !important;
+}
+
+html body.chat-mode .spike-dm-command-row {
+  padding: 8px 18px !important;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 36%) !important;
+}
+
+html body.chat-mode .spike-dm-pinned {
+  min-height: 36px !important;
+  padding: 0 12px !important;
+  border-radius: 13px !important;
+}
+
+html body.chat-mode .spike-dm-search,
+html body.chat-mode .spike-dm-search-wrap .social-action-btn {
+  min-height: 38px !important;
+  height: 38px !important;
+  padding-top: 7px !important;
+  padding-bottom: 7px !important;
+}
+
+html body.chat-mode .spike-dm-timeline {
+  padding: 16px 24px !important;
+  gap: 8px !important;
+  background-size: 38px 38px !important;
+}
+
+html body.chat-mode .spike-dm-message {
+  gap: 8px !important;
+}
+
+html body.chat-mode .spike-dm-message-avatar {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 10px !important;
+  flex-basis: 30px !important;
+}
+
+html body.chat-mode .spike-dm-message-stack {
+  max-width: min(620px, 58%) !important;
+  gap: 3px !important;
+}
+
+html body.chat-mode .spike-dm-message-meta {
+  font-size: 0.72rem !important;
+  gap: 6px !important;
+  padding: 0 2px !important;
+}
+
+html body.chat-mode .spike-dm-bubble {
+  padding: 8px 11px !important;
+  border-radius: 13px 13px 13px 4px !important;
+  line-height: 1.35 !important;
+  font-size: 0.92rem !important;
+  min-height: 0 !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12) !important;
+}
+
+html body.chat-mode .spike-dm-message.my-msg .spike-dm-bubble {
+  border-radius: 13px 13px 4px 13px !important;
+}
+
+html body.chat-mode .spike-dm-bubble-content > div {
+  min-height: 0 !important;
+}
+
+html body.chat-mode .spike-dm-reactions {
+  margin-top: 5px !important;
+}
+
+html body.chat-mode .spike-dm-typing {
+  min-height: 22px !important;
+  padding: 2px 24px !important;
+  font-size: 0.78rem !important;
+}
+
+html body.chat-mode .spike-dm-composer {
+  height: 74px !important;
+  min-height: 74px !important;
+  padding: 10px 18px !important;
+  grid-template-columns: 46px minmax(0, 1fr) 46px !important;
+}
+
+html body.chat-mode .spike-dm-compose-input {
+  min-height: 46px !important;
+  height: 46px !important;
+}
+
+.spike-dm-context-menu {
+  position: fixed;
+  z-index: 12000;
+  display: none;
+  min-width: 168px;
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: #171d27;
+  box-shadow: 0 22px 60px rgba(0,0,0,0.42);
+}
+
+.spike-dm-context-menu.open {
+  display: grid;
+  gap: 3px;
+}
+
+.spike-dm-context-menu button {
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--sn-text);
+  box-shadow: none;
+  font-size: 0.86rem;
+}
+
+.spike-dm-context-menu button:hover {
+  background: rgba(255,255,255,0.07);
+  transform: none;
+}
+
+.spike-dm-context-menu button.danger {
+  color: #fecaca;
+}
+
+.spike-dm-context-menu button.danger:hover {
+  background: rgba(239,68,68,0.16);
+}
+
+html[data-theme="light"] .spike-dm-context-menu {
+  background: #ffffff;
+  border-color: rgba(17,19,24,0.12);
+  box-shadow: 0 22px 60px rgba(17,19,24,0.18);
+}
+
+html[data-theme="light"] .spike-dm-context-menu button {
+  color: #111318;
+}
+
+html[data-theme="light"] .spike-dm-context-menu button:hover {
+  background: #f1f4f8;
+}
+
+@media (max-width: 860px) {
+  html body.chat-mode .spike-dm-message-stack {
+    max-width: calc(100% - 42px) !important;
+  }
+
+  html body.chat-mode .spike-dm-command-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* DM final pass: compact Discord-like message feed, matching the clean group feel. */
+html body.chat-mode .spike-dm-timeline {
+  padding: 14px 24px 18px !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+  background: #111821 !important;
+}
+
+html body.chat-mode .spike-dm-message,
+html body.chat-mode .spike-dm-message.my-msg,
+html body.chat-mode .spike-dm-message.their-msg {
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: 38px minmax(0, 1fr) !important;
+  gap: 10px !important;
+  align-items: start !important;
+  justify-content: start !important;
+  flex-direction: row !important;
+}
+
+html body.chat-mode .spike-dm-message-avatar {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  border-radius: 14px !important;
+  margin-top: 2px !important;
+}
+
+html body.chat-mode .spike-dm-message-stack,
+html body.chat-mode .spike-dm-message.my-msg .spike-dm-message-stack,
+html body.chat-mode .spike-dm-message.their-msg .spike-dm-message-stack {
+  width: auto !important;
+  max-width: min(680px, 76%) !important;
+  min-width: 0 !important;
+  align-items: flex-start !important;
+  justify-self: start !important;
+  gap: 4px !important;
+}
+
+html body.chat-mode .spike-dm-message-meta,
+html body.chat-mode .spike-dm-message.my-msg .spike-dm-message-meta {
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  padding: 0 !important;
+  color: var(--sn-muted) !important;
+  font-size: 0.78rem !important;
+  line-height: 1.1 !important;
+}
+
+html body.chat-mode .spike-dm-message-meta strong {
+  color: var(--sn-text) !important;
+  font-size: 0.88rem !important;
+  font-weight: 950 !important;
+}
+
+html body.chat-mode .spike-dm-bubble,
+html body.chat-mode .spike-dm-message.my-msg .spike-dm-bubble,
+html body.chat-mode .spike-dm-message.their-msg .spike-dm-bubble {
+  display: inline-block !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 8px 13px !important;
+  border-radius: 18px !important;
+  background: #202936 !important;
+  color: var(--sn-text) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow: none !important;
+  font-size: 0.95rem !important;
+  line-height: 1.35 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  aspect-ratio: auto !important;
+  flex: 0 1 auto !important;
+  align-self: flex-start !important;
+}
+
+html body.chat-mode .spike-dm-message.my-msg .spike-dm-bubble {
+  background: #253041 !important;
+  border-color: rgba(245, 164, 0, 0.22) !important;
+}
+
+html body.chat-mode .spike-dm-bubble-content,
+html body.chat-mode .spike-dm-bubble-content > div {
+  display: inline !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+html body.chat-mode .spike-dm-message-tools {
+  display: none !important;
+}
+
+html body.chat-mode .spike-dm-reactions {
+  display: flex !important;
+  margin-top: 6px !important;
+  gap: 5px !important;
+}
+
+html body.chat-mode .spike-dm-attachment {
+  margin-top: 4px !important;
+  max-width: min(360px, 56vw) !important;
+  max-height: 240px !important;
+  border-radius: 12px !important;
+}
+
+html body.chat-mode .spike-dm-command-row {
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 34%) !important;
+  padding: 8px 24px !important;
+  background: #111821 !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+}
+
+html body.chat-mode .spike-dm-pinned {
+  min-height: 34px !important;
+  height: 34px !important;
+}
+
+html body.chat-mode .spike-dm-composer {
+  height: 72px !important;
+  min-height: 72px !important;
+  padding: 10px 24px !important;
+  background: #111821 !important;
+}
+
+html[data-theme="light"] body.chat-mode .spike-dm-timeline,
+html[data-theme="light"] body.chat-mode .spike-dm-command-row,
+html[data-theme="light"] body.chat-mode .spike-dm-composer {
+  background: #f6f7f9 !important;
+}
+
+html[data-theme="light"] body.chat-mode .spike-dm-bubble,
+html[data-theme="light"] body.chat-mode .spike-dm-message.my-msg .spike-dm-bubble {
+  background: #ffffff !important;
+  color: #111318 !important;
+  border-color: rgba(17,19,24,0.11) !important;
+}
+
+@media (max-width: 760px) {
+  html body.chat-mode .spike-dm-message-stack,
+  html body.chat-mode .spike-dm-message.my-msg .spike-dm-message-stack {
+    max-width: calc(100vw - 142px) !important;
+  }
+}
+
+/* Social hub stability layer: compact messages, fixed composer, sane mobile. */
+.spike-social-hub,
+.spike-dm-elite {
+  min-height: 0 !important;
+}
+
+.spike-chat-main,
+.spike-dm-main {
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
+.spike-group-messages,
+.spike-dm-timeline,
+#ps-dm-messages-log {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-gutter: stable;
+}
+
+.spike-group-message,
+.spike-dm-message {
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+.spike-group-message .message-bubble,
+.spike-group-message .message-content,
+.spike-dm-bubble,
+.spike-dm-bubble-content {
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+html body.chat-mode .spike-dm-message-stack {
+  max-width: min(620px, 72%) !important;
+}
+
+html body.chat-mode .spike-dm-bubble {
+  min-height: 0 !important;
+  padding: 10px 14px !important;
+  border-radius: 18px !important;
+  line-height: 1.42 !important;
+}
+
+html body.chat-mode .spike-dm-bubble-content {
+  font-size: .95rem !important;
+}
+
+.spike-dm-composer,
+.spike-chat-composer {
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 5 !important;
+  background: color-mix(in srgb, var(--sn-bg, #0f131a) 92%, transparent) !important;
+  border-top: 1px solid var(--sn-line, rgba(255,255,255,.1)) !important;
+}
+
+.spike-dm-compose-input,
+.spike-chat-composer input,
+.spike-chat-composer textarea {
+  min-width: 0 !important;
+}
+
+@media (max-width: 860px) {
+  html body.chat-mode .spike-dm-message-stack,
+  html body.chat-mode .spike-dm-message.my-msg .spike-dm-message-stack {
+    max-width: calc(100vw - 112px) !important;
+  }
+
+  html body.chat-mode .spike-dm-message {
+    grid-template-columns: 32px 1fr !important;
+    gap: 8px !important;
+    padding-inline: 10px !important;
+  }
+
+  html body.chat-mode .spike-dm-message-avatar {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  html body.chat-mode .spike-dm-command-row {
+    grid-template-columns: 1fr !important;
+    padding-inline: 10px !important;
+  }
+
+  html body.chat-mode .spike-dm-search {
+    grid-template-columns: 1fr auto !important;
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "flags": {
+    "reactModulesBridge": true,
+    "feedbackWidget": false,
+    "performanceMonitor": true,
+    "market.trustPanel": true,
+    "socialHub.newLayout": true
+  }
+}
