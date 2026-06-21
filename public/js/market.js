@@ -41,6 +41,12 @@ function openWalletMarketTab() {
   requestAnimationFrame(() => document.querySelector('[data-market-view="wallet"]')?.scrollIntoView({ block: 'start' }));
 }
 
+function openPurchasesMarketTab() {
+  openMarketScreen();
+  switchMarketTab('purchases');
+  requestAnimationFrame(() => document.querySelector('[data-market-view="trades"]')?.scrollIntoView({ block: 'start' }));
+}
+
 function renderMarketplace() {
   const walletBalance = document.getElementById('market-wallet-balance');
   const walletLocked = document.getElementById('market-wallet-locked');
@@ -60,6 +66,7 @@ function renderMarketplace() {
   const disputeCount = document.getElementById('market-trades-dispute-count');
   const completedCount = document.getElementById('market-trades-completed-count');
   const cancelledCount = document.getElementById('market-trades-cancelled-count');
+  const tradesSubtitle = document.getElementById('market-trades-subtitle');
   const balance = Number(marketState.wallet?.balance || 0);
   const locked = Number(marketState.wallet?.locked_balance || 0);
   if (walletBalance) walletBalance.textContent = Math.round(Number(marketState.wallet?.balance || 0));
@@ -74,6 +81,7 @@ function renderMarketplace() {
   if (disputeCount) disputeCount.textContent = String(tradeStats.dispute);
   if (completedCount) completedCount.textContent = String(tradeStats.completed);
   if (cancelledCount) cancelledCount.textContent = String(tradeStats.cancelled);
+  if (tradesSubtitle) tradesSubtitle.textContent = getMarketTradesSubtitle();
   syncMarketChrome();
   updateMarketExchangeFilterOptions();
   renderMarketListingPreview();
@@ -152,10 +160,14 @@ function renderMarketplace() {
   if (tradesList) {
     const trades = getVisibleMarketTrades();
     if (!trades.length) {
-      tradesList.innerHTML = `<div class="sn-card spike-market-trade">Под этот фильтр сделок пока нет.</div>`;
+      tradesList.innerHTML = `<div class="sn-card spike-market-trade">${escapeHtml(getMarketTradesEmptyText())}</div>`;
     } else {
       tradesList.innerHTML = trades.map(trade => `
         <div class="sn-card spike-market-trade ${trade.dispute_status ? 'disputed' : ''}">
+          <div class="spike-market-card-top">
+            <span class="sn-badge spike-market-chip">${escapeHtml(getTradeRoleLabel(trade))}</span>
+            <span class="sn-badge spike-market-chip">${escapeHtml(formatSellerDate(trade.created_at))}</span>
+          </div>
           <strong>${escapeHtml(trade.title || 'Лот')}</strong> · ${Math.round(Number(trade.price || 0))} SPK · ${renderMarketStatusLabel(trade.status)}
           <div>${escapeHtml(trade.buyer_username || 'buyer')} -> ${escapeHtml(trade.seller_username || 'seller')}</div>
           ${renderTradeTimeline(trade)}
@@ -311,7 +323,8 @@ function syncMarketChrome() {
     btn.classList.toggle('active', btn.dataset.marketTab === marketUiState.tab);
   });
   document.querySelectorAll('.spike-market-view').forEach(view => {
-    view.classList.toggle('active', view.dataset.marketView === marketUiState.tab);
+    const targetView = marketUiState.tab === 'purchases' ? 'trades' : marketUiState.tab;
+    view.classList.toggle('active', view.dataset.marketView === targetView);
   });
   document.querySelectorAll('.spike-market-filter').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.marketFilter === marketUiState.filter);
@@ -321,6 +334,9 @@ function syncMarketChrome() {
   });
   document.querySelectorAll('.spike-trade-filter').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tradeFilter === marketUiState.tradeFilter);
+  });
+  document.querySelectorAll('.spike-trade-role-filter').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tradeRole === marketUiState.tradeRole);
   });
   const sortSelect = document.getElementById('market-sort-select');
   if (sortSelect) sortSelect.value = marketUiState.sort;
@@ -345,6 +361,11 @@ function syncMarketChrome() {
 
 function switchMarketTab(tab) {
   marketUiState.tab = tab || 'lots';
+  if (marketUiState.tab === 'purchases') {
+    marketUiState.tradeRole = 'buyer';
+  } else if (marketUiState.tab === 'trades' && marketUiState.tradeRole === 'buyer') {
+    marketUiState.tradeRole = 'all';
+  }
   syncMarketChrome();
   renderMarketplace();
   if (marketUiState.tab === 'moderation') loadMarketModeration();
@@ -447,6 +468,13 @@ function setMarketTradeFilter(filter) {
   renderMarketplace();
 }
 
+function setMarketTradeRole(role) {
+  marketUiState.tradeRole = role || 'all';
+  if (role === 'buyer') marketUiState.tab = 'purchases';
+  if (role === 'all' || role === 'seller') marketUiState.tab = 'trades';
+  renderMarketplace();
+}
+
 function getVisibleMarketListings() {
   const filtered = [...(marketState.listings || [])].filter(listing => (
     (
@@ -495,10 +523,30 @@ function getMarketTradeStats() {
 
 function getVisibleMarketTrades() {
   return [...(marketState.trades || [])].filter(trade => {
+    if (marketUiState.tradeRole === 'buyer' && Number(trade.buyer_id) !== Number(currentUserId)) return false;
+    if (marketUiState.tradeRole === 'seller' && Number(trade.seller_id) !== Number(currentUserId)) return false;
     if (marketUiState.tradeFilter === 'all') return true;
     if (marketUiState.tradeFilter === 'dispute') return Boolean(trade.dispute_status);
     return trade.status === marketUiState.tradeFilter;
   });
+}
+
+function getTradeRoleLabel(trade) {
+  if (Number(trade.buyer_id) === Number(currentUserId)) return 'моя покупка';
+  if (Number(trade.seller_id) === Number(currentUserId)) return 'моя продажа';
+  return 'сделка';
+}
+
+function getMarketTradesSubtitle() {
+  if (marketUiState.tradeRole === 'buyer') return 'твои покупки: escrow, получение, спор и история';
+  if (marketUiState.tradeRole === 'seller') return 'твои продажи: передача лота, escrow и выплаты';
+  return 'escrow, подтверждения, споры и хэш операции';
+}
+
+function getMarketTradesEmptyText() {
+  if (marketUiState.tradeRole === 'buyer') return 'Покупок пока нет. После покупки лота она появится здесь и останется после перезахода.';
+  if (marketUiState.tradeRole === 'seller') return 'Продаж пока нет. Когда кто-то купит твой лот, сделка появится здесь.';
+  return 'Под этот фильтр сделок пока нет.';
 }
 
 function getMarketActionItems() {

@@ -580,6 +580,10 @@
         <span class="spike-store-category-icon">₿</span>
         <strong>Кошелёк</strong>
       </button>
+      <button class="spike-store-category" onclick="openPurchasesMarketTab()">
+        <span class="spike-store-category-icon">✓</span>
+        <strong>Покупки</strong>
+      </button>
     </section>
 
     <section id="spike-marketplace" class="spike-marketplace" aria-label="SpikeNet Marketplace">
@@ -594,6 +598,7 @@
         <div class="spike-market-tabs" style="margin-top:14px;">
           <button class="sn-tab spike-market-tab active" data-market-tab="lots" onclick="switchMarketTab('lots')">Лоты</button>
           <button class="sn-tab spike-market-tab" data-market-tab="sell" onclick="switchMarketTab('sell')">Продать</button>
+          <button class="sn-tab spike-market-tab" data-market-tab="purchases" onclick="switchMarketTab('purchases')">Покупки</button>
           <button class="sn-tab spike-market-tab" data-market-tab="trades" onclick="switchMarketTab('trades')">Сделки</button>
           <button class="sn-tab spike-market-tab" data-market-tab="wallet" onclick="switchMarketTab('wallet')">Кошелёк</button>
           <button class="sn-tab spike-market-tab" data-market-tab="moderation" onclick="switchMarketTab('moderation')">Модерация</button>
@@ -710,7 +715,7 @@
         <div class="spike-market-head">
           <div>
             <div class="spike-market-title">Сделки</div>
-            <div class="spike-market-subtle">escrow, подтверждения, споры и хэш операции</div>
+            <div class="spike-market-subtle" id="market-trades-subtitle">escrow, подтверждения, споры и хэш операции</div>
           </div>
         </div>
         <div id="market-action-center" class="spike-market-protect"></div>
@@ -723,6 +728,11 @@
           <div class="spike-market-stat">Споры<strong id="market-trades-dispute-count">0</strong></div>
           <div class="spike-market-stat">Done<strong id="market-trades-completed-count">0</strong></div>
           <div class="spike-market-stat">Refund<strong id="market-trades-cancelled-count">0</strong></div>
+        </div>
+        <div class="spike-market-filters">
+          <button class="sn-tab spike-trade-role-filter active" data-trade-role="all" onclick="setMarketTradeRole('all')">Все сделки</button>
+          <button class="sn-tab spike-trade-role-filter" data-trade-role="buyer" onclick="setMarketTradeRole('buyer')">Мои покупки</button>
+          <button class="sn-tab spike-trade-role-filter" data-trade-role="seller" onclick="setMarketTradeRole('seller')">Мои продажи</button>
         </div>
         <div class="spike-market-filters">
           <button class="spike-trade-filter active" data-trade-filter="all" onclick="setMarketTradeFilter('all')">Все</button>
@@ -1159,7 +1169,7 @@
     </div>
   </div>
 
-  <script src="/js/market.js"></script>
+  <script src="/js/market.js?v=purchases-1"></script>
   <script src="/js/chat.js"></script>
   <script src="/js/groups.js"></script>
   <script src="/js/admin.js"></script>

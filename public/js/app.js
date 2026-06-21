@@ -58,7 +58,8 @@ let marketUiState = {
   maxPrice: null,
   minRating: 0,
   verifiedOnly: false,
-  tradeFilter: 'all'
+  tradeFilter: 'all',
+  tradeRole: 'all'
 };
 let marketModerationState = {
   loaded: false,
