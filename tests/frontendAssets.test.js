@@ -30,3 +30,22 @@ test('legacy root style.css is not used anymore', () => {
   assert.doesNotMatch(indexHtml, /href="\/style\.css"/);
   assert.equal(fs.existsSync(path.join(publicDir, 'style.css')), false);
 });
+
+test('retired home tracker and news css is not shipped', () => {
+  const css = ['ui.css', 'design-system.css', 'mobile.css', 'market.css', 'chat.css']
+    .map(file => fs.readFileSync(path.join(publicDir, 'css', file), 'utf8'))
+    .join('\n');
+
+  for (const retiredSelector of [
+    'spike-news',
+    'price-data',
+    'sales-box',
+    'form-box',
+    'games-grid',
+    'spike-picks',
+    'spike-onboarding',
+    'chart-container'
+  ]) {
+    assert.doesNotMatch(css, new RegExp(retiredSelector), `Retired selector still shipped: ${retiredSelector}`);
+  }
+});
