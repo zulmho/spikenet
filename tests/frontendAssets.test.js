@@ -49,3 +49,8 @@ test('retired home tracker and news css is not shipped', () => {
     assert.doesNotMatch(css, new RegExp(retiredSelector), `Retired selector still shipped: ${retiredSelector}`);
   }
 });
+
+test('legacy React analytics bundle is not shipped to the browser', () => {
+  assert.equal(fs.existsSync(path.join(publicDir, 'js', 'spikenet-react-modules.js')), false);
+  assert.ok(fs.existsSync(path.join(publicDir, 'js', 'spikenet-runtime.js')));
+});

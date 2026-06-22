@@ -4,9 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const roots = ['README.md', 'src', 'public', 'docs', 'scripts', 'migrations'];
-const ignoredFiles = new Set([
-  path.join('public', 'js', 'spikenet-react-modules.js')
-]);
+const ignoredFiles = new Set();
 
 function walk(target) {
   const fullPath = path.join(__dirname, '..', target);

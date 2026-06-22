@@ -29,13 +29,13 @@
     "jsonwebtoken": "^9.0.3",
     "node-cron": "^4.2.1",
     "pg": "^8.21.0",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
     "socket.io": "^4.8.3"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.0.2",
     "puppeteer-core": "^25.1.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "vite": "^8.0.16"
   }
 }

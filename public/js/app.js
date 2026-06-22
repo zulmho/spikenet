@@ -1755,22 +1755,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-function loadDeferredReactModules() {
-  if (window.__spikenetReactModulesLoading) return;
-  window.__spikenetReactModulesLoading = true;
+function loadDeferredSpikeRuntime() {
+  if (window.__spikenetRuntimeLoading) return;
+  window.__spikenetRuntimeLoading = true;
 
   const script = document.createElement('script');
-  script.type = 'module';
-  script.src = '/js/spikenet-react-modules.js';
+  script.defer = true;
+  script.src = '/js/spikenet-runtime.js';
   script.dataset.deferred = 'true';
   document.body.appendChild(script);
 }
 
-function scheduleDeferredReactModules() {
+function scheduleDeferredSpikeRuntime() {
   if (!document.getElementById('spikenet-react-modules-root')) return;
-  const start = () => setTimeout(loadDeferredReactModules, 1200);
+  const start = () => setTimeout(loadDeferredSpikeRuntime, 1200);
   if ('requestIdleCallback' in window) {
-    window.requestIdleCallback(loadDeferredReactModules, { timeout: 2500 });
+    window.requestIdleCallback(loadDeferredSpikeRuntime, { timeout: 2500 });
   } else if (document.readyState === 'complete') {
     start();
   } else {
@@ -1808,5 +1808,5 @@ function applyClientSettings(user) {
 // 🔥 ДВИЖОК ПУБЛИЧНЫХ ПРОФИЛЕЙ
 
 checkUserSession();
-scheduleDeferredReactModules();
+scheduleDeferredSpikeRuntime();
 
