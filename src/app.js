@@ -14,8 +14,24 @@ const adminRoutes = require('./routes/adminRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const telemetryRoutes = require('./routes/telemetryRoutes');
 const errorHandler = require('./middleware/errorHandler');
+const compression = require('./middleware/compression');
+const compressedStatic = require('./middleware/compressedStatic');
 const { rateLimit, requestId, requireJson, securityHeaders } = require('./middleware/security');
 const { checkDatabaseReady } = require('./services/bootCheck');
+
+function staticCacheOptions(kind = 'public') {
+  const isProduction = env.nodeEnv === 'production';
+  return {
+    etag: true,
+    maxAge: isProduction ? (kind === 'uploads' ? '7d' : '30d') : 0,
+    immutable: isProduction && kind !== 'html',
+    setHeaders(res, filePath) {
+      if (filePath.endsWith('.html')) {
+        res.setHeader('Cache-Control', 'no-cache');
+      }
+    }
+  };
+}
 
 function createApp(io) {
   const app = express();
@@ -32,15 +48,15 @@ function createApp(io) {
     windowMs: env.rateLimit.windowMs,
     max: env.rateLimit.max
   }));
+  app.use(compression);
   app.use(express.json({ limit: env.jsonLimit }));
   app.use(cookieParser());
-  app.use(express.static(path.join(__dirname, '..', 'public'), {
-    etag: true,
-    maxAge: env.nodeEnv === 'production' ? '1h' : 0
+  app.use(compressedStatic(path.join(__dirname, '..', 'public'), {
+    production: env.nodeEnv === 'production'
   }));
+  app.use(express.static(path.join(__dirname, '..', 'public'), staticCacheOptions()));
   app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads'), {
-    etag: true,
-    maxAge: env.nodeEnv === 'production' ? '7d' : 0,
+    ...staticCacheOptions('uploads'),
     fallthrough: false
   }));
 

@@ -1755,6 +1755,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+function loadDeferredReactModules() {
+  if (window.__spikenetReactModulesLoading) return;
+  window.__spikenetReactModulesLoading = true;
+
+  const script = document.createElement('script');
+  script.type = 'module';
+  script.src = '/js/spikenet-react-modules.js';
+  script.dataset.deferred = 'true';
+  document.body.appendChild(script);
+}
+
+function scheduleDeferredReactModules() {
+  if (!document.getElementById('spikenet-react-modules-root')) return;
+  const start = () => setTimeout(loadDeferredReactModules, 1200);
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(loadDeferredReactModules, { timeout: 2500 });
+  } else if (document.readyState === 'complete') {
+    start();
+  } else {
+    window.addEventListener('load', start, { once: true });
+  }
+}
+
 // 🔥 ИНИЦИАЛИЗАЦИЯ КЛИЕНТСКИХ НАСТРОЕК
 function applyClientSettings(user) {
   const dbAvatar = user.avatar_url || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + encodeURIComponent(user.username);
@@ -1784,5 +1807,6 @@ function applyClientSettings(user) {
 
 // 🔥 ДВИЖОК ПУБЛИЧНЫХ ПРОФИЛЕЙ
 
-checkUserSession();checkUserSession();
+checkUserSession();
+scheduleDeferredReactModules();
 

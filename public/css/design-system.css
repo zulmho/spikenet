@@ -830,7 +830,7 @@ html[data-theme="light"] .spike-seller-badge.risky {
 html[data-theme="light"] .spike-hero-banner {
     background:
         linear-gradient(90deg, rgba(5, 10, 22, .08), rgba(5, 10, 22, .02)),
-        url("/assets/spikenet-hero-banner.png") center / cover no-repeat !important;
+        url("/assets/spikenet-hero-banner.jpg") center / cover no-repeat !important;
     border-color: rgba(245, 164, 21, .34) !important;
     box-shadow: 0 20px 48px rgba(20, 27, 38, .12) !important;
 }
