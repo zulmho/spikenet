@@ -1,8 +1,16 @@
 # SpikeNet
 
-SpikeNet - игровой маркет с escrow и социальным слоем доверия: лоты, продавцы, сделки, отзывы, чат сделки, группы и модерация.
+SpikeNet - игровой маркетплейс с escrow-защитой и социальным слоем доверия.
 
-## Быстрый запуск
+Фокус проекта:
+
+```text
+лоты -> продавцы -> сделки -> escrow -> отзывы -> чат сделки -> модерация
+```
+
+Группы и личные чаты нужны как социальный слой вокруг сделок, а не как отдельная замена Discord.
+
+## Быстрый Запуск
 
 1. Установить зависимости:
 
@@ -16,7 +24,7 @@ npm install
 copy .env.example .env
 ```
 
-3. Указать PostgreSQL и секрет:
+3. Заполнить PostgreSQL и секрет:
 
 ```env
 DB_USER=postgres
@@ -39,10 +47,6 @@ npm run migrate
 npm run seed
 ```
 
-Демо-пользователи: `zulamho`, `Ing1`, `gamer50`, `Ibra`, `KeySmith`, `SkinVault`, `BoostRoom`, `RobloxHub`, `PSNMarket`, `RiskyFox`.
-
-Пароль у всех: `demo12345`.
-
 6. Запустить сервер:
 
 ```bash
@@ -55,6 +59,31 @@ npm run dev
 http://localhost:3001
 ```
 
+## Демо-Данные
+
+После `npm run seed` доступны демо-пользователи:
+
+```text
+zulamho
+Ing1
+gamer50
+Ibra
+KeySmith
+SkinVault
+BoostRoom
+RobloxHub
+PSNMarket
+RiskyFox
+```
+
+Пароль у демо-аккаунтов:
+
+```text
+demo12345
+```
+
+Для новых аккаунтов включена проверка сложности пароля.
+
 ## Миграции
 
 Миграции лежат в `migrations/` и применяются по порядку:
@@ -63,13 +92,15 @@ http://localhost:3001
 npm run migrate
 ```
 
-Проверка порядка и запрет runtime-создания схемы:
+Текущие важные миграции:
 
-```bash
-npm test
-```
+- `001_baseline.sql` - базовая схема.
+- `002_market_admin.sql` - маркет, сделки, роли модерации.
+- `004_telemetry.sql` - клиентские события и ошибки.
+- `006_payment_provider.sql` - заявки на пополнение/вывод.
+- `007_password_recovery.sql` - восстановление пароля.
 
-## Админ и модерация
+## Админка И Модерация
 
 Миграция `005_admin_seed.sql` выдаёт пользователю `id=1` роли:
 
@@ -79,9 +110,16 @@ support
 market_moderator
 ```
 
-Другого пользователя можно сделать модератором через Admin Center: выдать роль `market moderator`.
+`npm run seed` также выдаёт роли `admin`, `support`, `market_moderator` демо-пользователю `zulamho`.
 
-Демо-пользователь `zulamho` также получает роли `admin`, `support`, `market_moderator` через `npm run seed`.
+Через Admin Center можно:
+
+- выдавать и отзывать роли;
+- смотреть споры;
+- смотреть жалобы;
+- смотреть риск-сделки;
+- проверять новых продавцов;
+- смотреть логи действий.
 
 ## Платежи
 
@@ -97,42 +135,88 @@ PAYMENT_SPK_RATE=1
 Как это работает:
 
 - пользователь создаёт заявку на пополнение или вывод;
-- заявка получает `provider_payment_id`, `provider_status` и попадает в модерацию;
+- заявка получает `provider_payment_id` и `provider_status`;
 - модератор подтверждает или отклоняет заявку;
-- ledger фиксирует начисление, резерв вывода, возврат или выплату.
+- ledger фиксирует начисление, резерв, возврат или выплату.
 
-До подключения настоящего провайдера деньги не списываются с карты автоматически. Это специально: escrow/UI должны быть чистыми до реальных платежей.
-
-Для реального провайдера позже нужно добавить adapter в `src/services/paymentProvider.js` и заполнить:
-
-```env
-PAYMENT_PROVIDER=your_provider
-PAYMENT_API_KEY=...
-PAYMENT_SHOP_ID=...
-PAYMENT_WEBHOOK_SECRET=...
-```
+До подключения настоящего платёжного провайдера деньги не списываются с карты автоматически. Это сделано специально: escrow-сценарий и интерфейс должны быть стабильными до реальных платежей.
 
 ## Проверки
 
+Основные проверки:
+
 ```bash
 npm test
-npm run test:integration
 npm run prod:check
+npm run perf:audit
+npm audit --omit=dev
 ```
 
-## Полезные команды
+Интеграционные тесты:
+
+```bash
+npm run test:integration
+```
+
+## Оптимизация
+
+Уже сделано:
+
+- главный баннер сжат с `2.6 MB` до примерно `156 KB`;
+- убран неиспользуемый `Chart.js`;
+- большой React-бандл удалён из браузера;
+- вместо него добавлен лёгкий `spikenet-runtime.js`;
+- CSS/JS отдаются с gzip;
+- удалены старые CSS-хвосты новостей и game tracker;
+- добавлен `npm run perf:audit`.
+
+Текущие ориентиры по весу:
+
+```text
+spikenet-runtime.js: около 2 KB gzip
+market.js: около 20 KB gzip
+app.js: около 18 KB gzip
+ui.css: около 35 KB gzip
+```
+
+Команда для аудита:
+
+```bash
+npm run perf:audit
+```
+
+## Полезные Команды
 
 ```bash
 npm run db:backup
-npm run build:react-modules
+npm run seed
+npm run migrate
+npm test
+npm run perf:audit
 ```
 
-## Главный продуктовый фокус
-
-SpikeNet не должен расползаться в десять разных сервисов. Основной фокус:
+## Структура
 
 ```text
-игровой маркет + escrow + доверие через профиль продавца, отзывы, чат сделки и модерацию
+src/                  backend: routes, middleware, services, sockets
+public/               frontend: HTML, CSS, JS, assets
+migrations/           SQL migrations
+scripts/              migrate, seed, backup, production checks
+tests/                node:test checks
+uploads/              user uploads
+docs/                 technical notes
 ```
 
-Группы и личные чаты нужны как социальный слой вокруг сделок, а не как отдельная попытка заменить Discord.
+## Production Checklist
+
+Перед реальным запуском:
+
+- поставить сильный `JWT_SECRET`;
+- заполнить параметры PostgreSQL;
+- включить `NODE_ENV=production`;
+- настроить backup базы;
+- проверить `npm run prod:check`;
+- проверить `npm audit --omit=dev`;
+- проверить `npm run perf:audit`;
+- подключить домен и HTTPS;
+- только потом подключать реальный платёжный провайдер.
